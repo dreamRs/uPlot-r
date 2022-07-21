@@ -1,0 +1,22 @@
+Package: uPlot
+Title: Fast Interactive Charts with 'µPlot' 'JavaScript' Library
+Version: 0.0.0.9000
+Authors@R: 
+    c(person(given = "Victor",
+             family = "Perrier",
+             role = c("aut", "cre", "cph"),
+             email = "victor.perrier@dreamrs.fr"),
+      person(given = "Fanny",
+             family = "Meyer",
+             role = "aut"),
+      person(given = "Leon",
+             family = "Sorokin",
+             role = "cph",
+             email = "leeoniya@gmail.com",
+             comment = "µPlot.js author"))
+Description: An interface for 'µPlot' 'JavaScript' library in R.
+    'μPlot' is a fast, memory-efficient Canvas 2D-based chart for plotting time series, lines, areas, ohlc & bars.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
