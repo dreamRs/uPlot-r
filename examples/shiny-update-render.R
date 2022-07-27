@@ -7,6 +7,11 @@ ui <- fluidPage(
       width = 8,
       offset = 2,
       tags$h3("uPlot example"),
+      selectInput(
+        inputId = "variable",
+        label = "Energy source:",
+        choices = names(eco2mix)[-1]
+      ),
       uPlotOutput(outputId = "plot")
     )
   )
@@ -17,10 +22,10 @@ server <- function(input, output, session) {
     uPlot::uPlot(
       data = list(
         as.numeric(eco2mix$date),
-        eco2mix$conso
+        eco2mix[[input$variable]]
       ),
       options = list(
-        title = "Electricity production (2012 - 2020)",
+        title = "Electricity production",
         series = list(
           list(label = "Time"),
           list(label = "Production (MW)", stroke = "#0174DF")

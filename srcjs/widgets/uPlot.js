@@ -32,6 +32,9 @@ HTMLWidgets.widget({
 
     return {
       renderValue: function(x) {
+        if (typeof plot !== "undefined") {
+          plot.destroy();
+        }
         options = x.options;
         options.width = width;
         options.height = height;
