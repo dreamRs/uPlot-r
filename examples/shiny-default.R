@@ -17,7 +17,7 @@ server <- function(input, output, session) {
     uPlot::uPlot(
       data = list(
         as.numeric(eco2mix$date),
-        eco2mix$conso
+        eco2mix$consumption
       ),
       options = list(
         title = "Electricity production (2012 - 2020)",

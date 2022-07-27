@@ -10,7 +10,7 @@ ui <- fluidPage(
       selectInput(
         inputId = "variable",
         label = "Energy source:",
-        choices = names(eco2mix)[-1]
+        choices = names(eco2mix)[-c(1, 2)]
       ),
       uPlotOutput(outputId = "plot")
     )

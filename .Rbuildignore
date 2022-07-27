@@ -10,3 +10,4 @@
 ^webpack\.common\.js$
 eco2mix/
 ^examples$
+^data-raw$
