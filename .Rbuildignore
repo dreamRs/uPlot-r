@@ -9,3 +9,4 @@
 ^webpack\.prod\.js$
 ^webpack\.common\.js$
 eco2mix/
+^examples$
