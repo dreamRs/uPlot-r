@@ -18,6 +18,19 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
+
+  colors <- list(
+    "bioenergies" = "#156956",
+    "fuel" = "#80549f",
+    "coal" = "#a68832",
+    "solar" = "#d66b0d",
+    "gas" = "#f20809",
+    "wind" = "#72cbb7",
+    "hydraulic" = "#2672b0",
+    "nuclear" = "#e4a701",
+    "pumping" = "#0e4269"
+  )
+
   output$plot <- renderUPlot({
     uPlot::uPlot(
       data = list(
@@ -28,7 +41,7 @@ server <- function(input, output, session) {
         title = "Electricity production",
         series = list(
           list(label = "Time"),
-          list(label = "Production (MW)", stroke = "#0174DF")
+          list(label = "Production (MW)", stroke = colors[[input$variable]])
         )
       )
     )

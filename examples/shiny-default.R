@@ -23,7 +23,7 @@ server <- function(input, output, session) {
         title = "Electricity production (2012 - 2020)",
         series = list(
           list(label = "Time"),
-          list(label = "Production (MW)", stroke = "#0174DF")
+          list(label = "Consumption (MW)", stroke = "#0174DF")
         )
       )
     )

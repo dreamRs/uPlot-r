@@ -1,6 +1,7 @@
 import "widgets";
 import uPlot from "uplot";
 import "uplot/dist/uPlot.min.css";
+import * as utils from "../modules/utils";
 
 const resizer = (el) => {
   const func = (u, init) => {
@@ -41,9 +42,25 @@ HTMLWidgets.widget({
         data = x.data;
         plot = new uPlot(options, data, resizer(el));
       },
-
+      getWidget: function() {
+        return plot;
+      },
       resize: function(width, height) {}
     };
   }
 });
 
+if (HTMLWidgets.shinyMode) {
+  Shiny.addCustomMessageHandler("uplot-api", function(obj) {
+    var plot = utils.getWidget(obj.id);
+    if (typeof plot != "undefined") {
+      plot[obj.name].apply(null, obj.args);
+    }
+  });
+  Shiny.addCustomMessageHandler("uplot-setData", function(obj) {
+    var plot = utils.getWidget(obj.id);
+    if (typeof plot != "undefined") {
+      plot.setData(obj.data);
+    }
+  });
+}
