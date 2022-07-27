@@ -2,7 +2,8 @@
 #'
 #' @description Fast, memory-efficient Canvas 2D-based charts with Javascript library [µPlot](https://github.com/leeoniya/uPlot).
 #'
-#' @param data Data to plot as a `list`.
+#' @param data Data to plot as a `list` (must match `µPlot.js` expectations) or
+#'  a `data.frame` where first column is the x-axis and the others the series to plot.
 #' @param options Options to generate the plot.
 #' @param width,height A numeric input in pixels.
 #' @param elementId Use an explicit element ID for the widget.
@@ -28,6 +29,9 @@
 #'   )
 #' )
 uPlot <- function(data, options, width = NULL, height = NULL, elementId = NULL) {
+
+  if (is.data.frame(data))
+    data <- prepare_data(data)
 
   x <- list(
     data = data,
