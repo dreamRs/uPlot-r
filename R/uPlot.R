@@ -1,10 +1,32 @@
-#' Fast, memory-efficient Canvas 2D-based charts
+#' @title uPlot
 #'
-#' <Add Description>
+#' @description Fast, memory-efficient Canvas 2D-based charts with Javascript library [µPlot](https://github.com/leeoniya/uPlot).
+#'
+#' @param data Data to plot as a `list`.
+#' @param options Options to generate the plot.
+#' @param width,height A numeric input in pixels.
+#' @param elementId Use an explicit element ID for the widget.
+#'
+#' @return An `htmlwidget` object.
 #'
 #' @importFrom htmlwidgets createWidget sizingPolicy
 #'
 #' @export
+#'
+#' @examples
+#' uPlot::uPlot(
+#'   data = list(
+#'     as.numeric(eco2mix$date),
+#'     eco2mix$consumption
+#'   ),
+#'   options = list(
+#'     title = "Electricity consumption in France (2012 - 2020)",
+#'     series = list(
+#'       list(label = "Time"),
+#'       list(label = "Consumption", stroke = "#088A08")
+#'     )
+#'   )
+#' )
 uPlot <- function(data, options, width = NULL, height = NULL, elementId = NULL) {
 
   x <- list(

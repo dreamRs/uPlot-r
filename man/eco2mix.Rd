@@ -3,9 +3,7 @@
 \docType{data}
 \name{eco2mix}
 \alias{eco2mix}
-\title{eco2mix data
-
-The dataset contains data about electricity consumption and production in France between 2012 and 2020.}
+\title{eco2mix data}
 \format{
 A data frame with 157824 observations and 11 variables.
 }
@@ -16,8 +14,6 @@ Rte (Réseau et transport d'électricité) (\url{https://www.rte-france.com/eco2
 eco2mix
 }
 \description{
-eco2mix data
-
 The dataset contains data about electricity consumption and production in France between 2012 and 2020.
 }
 \keyword{datasets}

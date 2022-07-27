@@ -2,10 +2,37 @@
 % Please edit documentation in R/uPlot.R
 \name{uPlot}
 \alias{uPlot}
-\title{Fast, memory-efficient Canvas 2D-based charts}
+\title{uPlot}
 \usage{
 uPlot(data, options, width = NULL, height = NULL, elementId = NULL)
 }
+\arguments{
+\item{data}{Data to plot as a \code{list}.}
+
+\item{options}{Options to generate the plot.}
+
+\item{width, height}{A numeric input in pixels.}
+
+\item{elementId}{Use an explicit element ID for the widget.}
+}
+\value{
+An \code{htmlwidget} object.
+}
 \description{
-<Add Description>
+Fast, memory-efficient Canvas 2D-based charts with Javascript library \href{https://github.com/leeoniya/uPlot}{µPlot}.
+}
+\examples{
+uPlot::uPlot(
+  data = list(
+    as.numeric(eco2mix$date),
+    eco2mix$consumption
+  ),
+  options = list(
+    title = "Electricity consumption in France (2012 - 2020)",
+    series = list(
+      list(label = "Time"),
+      list(label = "Consumption", stroke = "#088A08")
+    )
+  )
+)
 }
