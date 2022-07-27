@@ -54,7 +54,7 @@ uPlot <- function(data, options, width = NULL, height = NULL, elementId = NULL) 
       knitr.defaultWidth = "100%",
       knitr.defaultHeight = "350px",
       browser.fill = TRUE,
-      viewer.suppress = FALSE,
+      viewer.suppress = TRUE,
       browser.external = TRUE,
       padding = 5
     )
