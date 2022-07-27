@@ -62,7 +62,7 @@ uPlot::uPlot(
     eco2mix$conso
   ),
   options = list(
-    # title = "Electricity production (2012 - 2020)",
+    title = "Electricity production (2012 - 2020)",
     series = list(
       list(label = "Time"),
       list(label = "Conso", stroke = "red")
