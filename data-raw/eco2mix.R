@@ -17,45 +17,22 @@ library(fasttime)
 
 # Download data -----------------------------------------------------------
 
-dir.create("data-raw/input")
-url <- "https://eco2mix.rte-france.com/download/eco2mix/eCO2mix_RTE_Annuel-Definitif_%s.zip"
-annees <- 2012:2020
-for (i in seq_along(annees)) {
-  download.file(
-    url = sprintf(url, annees[i]),
-    destfile = file.path(
-      "data-raw", "input", basename(sprintf(url, annees[i]))
-    )
-  )
-  unzip(file.path(
-    "data-raw", "input", basename(sprintf(url, annees[i]))
-  ), exdir = "data-raw/input/")
-}
+# Source: https://odre.opendatasoft.com/explore/dataset/eco2mix-national-cons-def/
 
 
 
 # Read & transform data ---------------------------------------------------
 
-eco2mix <- list.files(path = "eco2mix/", pattern = "\\.xls$", full.names = TRUE) |>
-  lapply(data.table::fread, encoding = "Latin-1") |>
-  data.table::rbindlist(fill = TRUE)
+eco2mix <- fread(file = "data-raw/input/eco2mix-national-cons-def.csv")
+eco2mix <- eco2mix[, c(5, 6, 9:17)]
+setnames(eco2mix, c("datetime", "consumption", "fuel", "coal", "gas", "nuclear", "wind", "solar", "hydraulic", "pumping", "bioenergies"))
 
-eco2mix <- eco2mix[, c(3, 4, 5, 8:16)]
-setnames(eco2mix, c("date", "heure", "consumption", "fuel", "coal", "gas", "nuclear", "wind", "solar", "hydraulic", "pumping", "bioenergies"))
-
-# fix 2013
-fix2013 <- data.table::fread("eco2mix/eCO2mix_RTE_Annuel-Definitif_2013.xls", header = FALSE, encoding = "Latin-1")
-fix2013 <- fix2013[, c(3, 4, 5, 8:16)]
-setnames(fix2013, c("date", "heure", "consumption", "fuel", "coal", "gas", "nuclear", "wind", "solar", "hydraulic", "pumping", "bioenergies"))
-eco2mix <- rbind(eco2mix, fix2013)
-
-eco2mix[, date := fasttime::fastPOSIXct(paste(date, heure))]
-eco2mix[, heure := NULL]
+eco2mix[, datetime := fasttime::fastPOSIXct(datetime)]
 eco2mix <- eco2mix[!is.na(consumption)]
 # eco2mix <- melt(data = eco2mix, id.vars = 1, variable.name = "source", value.name = "conso", na.rm = TRUE)
 
 
-setorder(eco2mix, date)
+setorder(eco2mix, datetime)
 setDF(eco2mix)
 
 
