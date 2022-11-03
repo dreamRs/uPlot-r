@@ -15,4 +15,4 @@
 #' @format A data frame with 365 observations and 5 variables.
 #'
 #' @source Enedis (\url{https://data.enedis.fr/explore/dataset/donnees-de-temperature-et-de-pseudo-rayonnement/})
-"eco2mix"
+"temperatures"
