@@ -56,13 +56,20 @@ uPlot(
   options = list(
     title = "Temperatures in 2022 with range from 2018 to 2021",
     series = list(
-      list(label = "Time"),
+      list(label = "Date"),
       list(label = "Temperature (°C)", stroke = "red", width = 2),
       list(label = "Low", stroke = "#848585", dash = c(8, 2)),
       list(label = "High", stroke = "#848585", dash = c(8, 2))
     ),
     bands = list(
       list(series = c(2, 3), fill = "#8485854D", dir = 1)
+    ),
+    axes = list(
+      list(),
+      list(
+        label = "Temperature in degree celsius",
+        values = htmlwidgets::JS("function(u, vals) {return vals.map(v => v + '°C');}")
+      )
     )
   )
 )
@@ -72,7 +79,7 @@ uPlot(
   options = list(
     title = "Temperatures in 2022 compared to average from previous years",
     series = list(
-      list(label = "Time"),
+      list(label = "Date"),
       list(
         label = "Temperature 2022", stroke = "red", width = 2,
         value = htmlwidgets::JS("function(u, v) {return v + '°C';}")
@@ -85,6 +92,13 @@ uPlot(
     bands = list(
       list(series = c(1, 2), fill = "#F681804D"),
       list(series = c(2, 1), fill = "#2F64FF4D")
+    ),
+    axes = list(
+      list(),
+      list(
+        label = "Temperature in degree celsius",
+        values = htmlwidgets::JS("function(u, vals) {return vals.map(v => v + '°C');}")
+      )
     )
   )
 )
