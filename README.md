@@ -23,7 +23,7 @@ remotes::install_github("dreamRs/uPlot-r")
 
 ## Example
 
-Here's a time series in half-hourly steps over 9 years, representing a total of 1,643,328 points (9 series of 182,592).
+Here's a time series in half-hourly steps over 9 years, representing a total of 1,710,612 points (9 series of 190,068).
 
 ```r
 library(uPlot)
