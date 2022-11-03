@@ -1,4 +1,4 @@
-^uPlot\.Rproj$
+^uPlot-r\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^srcjs$
@@ -11,3 +11,4 @@
 eco2mix/
 ^examples$
 ^data-raw$
+^\.github$
