@@ -2,6 +2,7 @@ import "widgets";
 import uPlot from "uplot";
 import "uplot/dist/uPlot.min.css";
 import * as utils from "../modules/utils";
+import { stackedChart } from "../modules/stack";
 
 const resizer = el => {
   const func = (u, init) => {
@@ -117,7 +118,33 @@ HTMLWidgets.widget({
         options.width = width;
         options.height = height;
         data = x.data;
-        plot = new uPlot(options, data, resizer(el));
+        if (x.stacked) {
+          if (!options.hooks)
+            options.hooks = {};
+          options.hooks.init = [
+            u => {
+              [...u.root.querySelectorAll(".u-legend .u-series")].forEach(
+                (el, i) => {
+                  if (u.series[i]._hide) {
+                    el.style.display = "none";
+                  }
+                }
+              );
+            }
+          ];
+          plot = stackedChart(
+            options.title,
+            options.series,
+            data,
+            null,
+            width,
+            height,
+            options.hooks,
+            resizer(el)
+          );
+        } else {
+          plot = new uPlot(options, data, resizer(el));
+        }
       },
       getWidget: function() {
         return plot;
@@ -142,5 +169,5 @@ if (HTMLWidgets.shinyMode) {
   });
 }
 
-
 export { uPlot, drawPoints };
+

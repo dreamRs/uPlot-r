@@ -4,13 +4,15 @@
 \alias{uPlot}
 \title{uPlot}
 \usage{
-uPlot(data, options, width = NULL, height = NULL, elementId = NULL)
+uPlot(data, options, ..., width = NULL, height = NULL, elementId = NULL)
 }
 \arguments{
 \item{data}{Data to plot as a \code{list} (must match \code{µPlot.js} expectations) or
 a \code{data.frame} where first column is the x-axis and the others the series to plot.}
 
 \item{options}{Options to generate the plot.}
+
+\item{...}{Additional arguments.}
 
 \item{width, height}{A numeric input in pixels.}
 
