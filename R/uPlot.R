@@ -29,10 +29,17 @@
 #'     )
 #'   )
 #' )
-uPlot <- function(data, options, ..., width = NULL, height = NULL, elementId = NULL) {
+uPlot <- function(data, options = list(), ..., width = NULL, height = NULL, elementId = NULL) {
 
-  if (is.data.frame(data))
+  if (is.data.frame(data)) {
     data <- prepare_data(data)
+    if (length(options) < 1) {
+      labels <- attr(data, ".nms")
+      strokes <- rep_len(palette(), length(labels))
+      options <- prepare_options_series(label = labels, stroke = strokes)
+    }
+  }
+
 
   x <- list(
     data = data,
