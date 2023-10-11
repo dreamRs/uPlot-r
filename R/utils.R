@@ -1,4 +1,14 @@
 
+check_uplot <- function(x) {
+  stopifnot(
+    "uplot must be a uPlot() object." = inherits(x, "uPlot")
+  )
+}
+
+drop_nulls <- function(x) {
+  x[lengths(x) > 0]
+}
+
 all_numeric <- function(.data) {
   all(vapply(.data, FUN = is.numeric, FUN.VALUE = logical(1)))
 }

@@ -26,7 +26,7 @@ a \code{data.frame} where first column is the x-axis and the others the series t
 \item{elementId}{Use an explicit element ID for the widget.}
 }
 \value{
-An \code{htmlwidget} object.
+An \code{htmlwidget} object of class \code{"uPlot"}.
 }
 \description{
 Fast, memory-efficient Canvas 2D-based charts with Javascript library \href{https://github.com/leeoniya/uPlot}{µPlot}.

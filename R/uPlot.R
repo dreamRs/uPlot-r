@@ -9,7 +9,7 @@
 #' @param width,height A numeric input in pixels.
 #' @param elementId Use an explicit element ID for the widget.
 #'
-#' @return An `htmlwidget` object.
+#' @return An `htmlwidget` object of class `"uPlot"`.
 #'
 #' @importFrom htmlwidgets createWidget sizingPolicy
 #'
@@ -66,8 +66,8 @@ uPlot <- function(data, options = list(), ..., width = NULL, height = NULL, elem
       knitr.defaultWidth = "100%",
       knitr.defaultHeight = "350px",
       browser.fill = TRUE,
-      viewer.suppress = TRUE,
-      browser.external = TRUE,
+      # viewer.suppress = TRUE,
+      # browser.external = TRUE,
       padding = 5
     )
   )
