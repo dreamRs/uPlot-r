@@ -4,7 +4,14 @@
 \alias{uPlot}
 \title{uPlot}
 \usage{
-uPlot(data, options, ..., width = NULL, height = NULL, elementId = NULL)
+uPlot(
+  data,
+  options = list(),
+  ...,
+  width = NULL,
+  height = NULL,
+  elementId = NULL
+)
 }
 \arguments{
 \item{data}{Data to plot as a \code{list} (must match \code{µPlot.js} expectations) or
