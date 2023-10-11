@@ -12,6 +12,7 @@
 #' @return An `htmlwidget` object of class `"uPlot"`.
 #'
 #' @importFrom htmlwidgets createWidget sizingPolicy
+#' @importFrom grDevices palette
 #'
 #' @export
 #'
