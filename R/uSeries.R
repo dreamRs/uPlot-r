@@ -38,3 +38,33 @@ find_serie_index <- function(uplot, name) {
   return(index)
 }
 
+
+
+
+#' Series colors
+#'
+#' Allow to specify series colors in one call.
+#'
+#' @param uplot Chart created with [uPlot()].
+#' @param ... Colors to attribute to each series.
+#'
+#' @return An `htmlwidget` object of class `"uPlot"`.
+#' @export
+#'
+#' @examples
+#' uPlot(temperatures[, c("date", "temperature")]) %>%
+#'   uColors(temperature = "black")
+#'
+#' uPlot(temperatures[, c("date", "low", "high")]) %>%
+#'   uColors(
+#'     low = "blue",
+#'     high = "red"
+#'   )
+uColors <- function(uplot, ...) {
+  args <- list(...)
+  for (i in seq_along(args)) {
+    uplot <- uSeries(uplot, name = names(args)[i], stroke = args[[i]])
+  }
+  uplot
+}
+

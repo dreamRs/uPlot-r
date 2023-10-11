@@ -17,7 +17,7 @@ prepare_data <- function(.data) {
   stopifnot(".data must be a data.frame or equivalent" = is.data.frame(.data))
   stopifnot(".data must have at least 2 columns" = ncol(.data) >= 2)
   stopifnot("First column of .data must be either a numeric or a POSIXct" = inherits(.data[[1]], c("numeric", "POSIXct", "Date")))
-  stopifnot("All columns except first one of .data must numeric" = all_numeric(.data[, -1]))
+  stopifnot("All columns except first one of .data must be numeric" = all_numeric(.data[, -1]))
   .nms <- names(.data)
   .data <- unname(as.list(.data))
   if (inherits(.data[[1]], c("Date"))) {

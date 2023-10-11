@@ -9,9 +9,6 @@
 <!-- badges: end -->
 
 
-:warning: Doesn't work in RStudio viewer. :warning:
-
-
 ## Installation
 
 You can install the development version of uPlot from [GitHub](https://github.com/dreamRs/uPlot-r) with:
@@ -33,15 +30,17 @@ uPlot(
     title = "Electricity production by sources in France (2012 - 2022)"
   )
 ) %>% 
-  uSeries(name = "fuel", stroke = "#80549f") %>% 
-  uSeries(name = "coal", stroke = "#a68832") %>% 
-  uSeries(name = "gas", stroke = "#f20809") %>% 
-  uSeries(name = "nuclear", stroke = "#e4a701") %>% 
-  uSeries(name = "wind", stroke = "#72cbb7") %>% 
-  uSeries(name = "solar", stroke = "#d66b0d") %>% 
-  uSeries(name = "hydraulic", stroke = "#2672b0") %>% 
-  uSeries(name = "pumping", stroke = "#0e4269") %>% 
-  uSeries(name = "bioenergies", stroke = "#156956")
+  uColors(
+    "bioenergies" = "#156956",
+    "fuel" = "#80549f",
+    "coal" = "#a68832",
+    "solar" = "#d66b0d",
+    "gas" = "#f20809",
+    "wind" = "#72cbb7",
+    "hydraulic" = "#2672b0",
+    "nuclear" = "#e4a701",
+    "pumping" = "#0e4269"
+  )
 ```
 ![uPlot example](man/figures/uplot.png)
 
