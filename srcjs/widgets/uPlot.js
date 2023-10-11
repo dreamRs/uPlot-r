@@ -114,10 +114,10 @@ HTMLWidgets.widget({
         if (typeof plot !== "undefined") {
           plot.destroy();
         }
-        options = x.options;
+        options = x.config.options;
         options.width = width;
         options.height = height;
-        data = x.data;
+        data = x.config.data;
         if (x.stacked) {
           if (!options.hooks)
             options.hooks = {};

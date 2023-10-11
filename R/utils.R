@@ -21,12 +21,10 @@ prepare_data <- function(.data) {
 
 prepare_options_series <- function(...) {
   opts <- list(...)
-  list(
-    series = lapply(
-      X = seq_along(opts[[1]]),
-      FUN = function(i) {
-        lapply(X = opts, FUN = `[[`, i)
-      }
-    )
+  lapply(
+    X = seq_along(opts[[1]]),
+    FUN = function(i) {
+      lapply(X = opts, FUN = `[[`, i)
+    }
   )
 }

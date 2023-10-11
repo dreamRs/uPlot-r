@@ -30,21 +30,24 @@
 #'   )
 #' )
 uPlot <- function(data, options = list(), ..., width = NULL, height = NULL, elementId = NULL) {
-
+  options <- as.list(options)
+  series_nms <- names(data)
   if (is.data.frame(data)) {
     data <- prepare_data(data)
-    if (length(options) < 1) {
-      labels <- attr(data, ".nms")
-      strokes <- rep_len(palette(), length(labels))
-      options <- prepare_options_series(label = labels, stroke = strokes)
+    series_nms <- attr(data, ".nms")
+    if (is.null(options$series)) {
+      strokes <- rep_len(palette(), length(series_nms))
+      options$series <- prepare_options_series(label = series_nms, stroke = strokes)
     }
   }
 
-
   x <- list(
-    data = data,
-    options = options,
-    ...
+    config = list(
+      data = data,
+      options = options,
+      ...
+    ),
+    series_nms = series_nms
   )
 
   htmlwidgets::createWidget(
