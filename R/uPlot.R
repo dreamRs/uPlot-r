@@ -31,15 +31,19 @@
 #'   )
 #' )
 uPlot <- function(data, options = list(), ..., width = NULL, height = NULL, elementId = NULL) {
+
   options <- as.list(options)
   series_nms <- names(data)
   if (is.data.frame(data)) {
     data <- prepare_data(data)
     series_nms <- attr(data, ".nms")
-    if (is.null(options$series)) {
-      strokes <- rep_len(palette(), length(series_nms))
-      options$series <- prepare_options_series(label = series_nms, stroke = strokes)
-    }
+  }
+  if (is.null(options$series)) {
+    strokes <- rep_len(palette(), length(series_nms))
+    options$series <- prepare_options_series(label = series_nms, stroke = strokes)
+  }
+  if (is.null(options$bands)) {
+    options$bands <- list()
   }
 
   x <- list(

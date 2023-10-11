@@ -2,6 +2,7 @@
 
 export("%>%")
 export(renderUPlot)
+export(uBands)
 export(uColors)
 export(uPlot)
 export(uPlotOutput)

@@ -65,10 +65,10 @@ uPlot(
     )
   )
 ) %>% 
-  uSeries(name = "temperature", label = "Temperature (°C)", stroke = "red", width = 2) %>% 
-  uSeries(name = "low", label = "Low", stroke = "#848585", dash = c(8, 2)) %>% 
-  uSeries(name = "high", label = "High", stroke = "#848585", dash = c(8, 2)) %>% 
-  uSeries(name = "average", label = "Average", show = FALSE, stroke = "#111")
+  uSeries("temperature", label = "Temperature (°C)", stroke = "red", width = 2) %>% 
+  uSeries("low", label = "Low", stroke = "#848585", dash = c(8, 2)) %>% 
+  uSeries("high", label = "High", stroke = "#848585", dash = c(8, 2)) %>% 
+  uSeries("average", label = "Average", show = FALSE, stroke = "#111")
 ```
 
 ![temperature 1 example](man/figures/temperature1.png)
