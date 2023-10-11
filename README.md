@@ -53,9 +53,6 @@ uPlot(
   data = temperatures,
   options = list(
     title = "Temperatures in 2022 with range from 2018 to 2021",
-    bands = list(
-      list(series = c(2, 3), fill = "#8485854D", dir = 1)
-    ),
     axes = list(
       list(),
       list(
@@ -65,6 +62,7 @@ uPlot(
     )
   )
 ) %>% 
+  uBands("low", "high", fill = "#8485854D") %>% 
   uSeries("temperature", label = "Temperature (°C)", stroke = "red", width = 2) %>% 
   uSeries("low", label = "Low", stroke = "#848585", dash = c(8, 2)) %>% 
   uSeries("high", label = "High", stroke = "#848585", dash = c(8, 2)) %>% 
@@ -79,10 +77,6 @@ uPlot(
   data = temperatures[, c(1, 2, 5)],
   options = list(
     title = "Temperatures in 2022 compared to average from previous years",
-    bands = list(
-      list(series = c(1, 2), fill = "#F681804D"),
-      list(series = c(2, 1), fill = "#2F64FF4D")
-    ),
     axes = list(
       list(),
       list(
@@ -92,6 +86,8 @@ uPlot(
     )
   )
 ) %>% 
+  uBands("temperature", "average", fill = "#F681804D") %>%
+  uBands("average", "temperature", fill = "#2F64FF4D") %>% 
   uSeries(
     name = "temperature",
     label = "Temperature 2022", 
