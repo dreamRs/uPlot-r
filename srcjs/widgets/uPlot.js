@@ -3,6 +3,7 @@ import uPlot from "uplot";
 import "uplot/dist/uPlot.min.css";
 import * as utils from "../modules/utils";
 import { stackedChart } from "../modules/stack";
+import { ungzip } from "pako";
 
 const resizer = el => {
   const func = (u, init) => {
@@ -118,6 +119,14 @@ HTMLWidgets.widget({
         options.width = width;
         options.height = height;
         data = x.config.data;
+        if (x.use_gzipped_json) {
+          const gezipedData = atob(data);
+          const gzipedDataArray = Uint8Array.from(gezipedData, c => c.charCodeAt(0));
+          const ungzipedData = ungzip(gzipedDataArray);
+          const decodedData = new TextDecoder().decode(ungzipedData);
+          data = JSON.parse(decodedData);
+        }
+        console.log(data);
         if (x.stacked) {
           if (!options.hooks)
             options.hooks = {};

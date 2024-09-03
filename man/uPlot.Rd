@@ -8,6 +8,7 @@ uPlot(
   data,
   options = list(),
   ...,
+  use_gzipped_json = FALSE,
   width = NULL,
   height = NULL,
   elementId = NULL
@@ -20,6 +21,8 @@ a \code{data.frame} where first column is the x-axis and the others the series t
 \item{options}{Options to generate the plot.}
 
 \item{...}{Additional arguments.}
+
+\item{use_gzipped_json}{Use \code{\link[jsonlite:gzjson]{jsonlite::as_gzjson_b64()}} to compress JSON data.}
 
 \item{width, height}{A numeric input in pixels.}
 
