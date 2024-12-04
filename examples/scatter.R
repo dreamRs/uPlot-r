@@ -1,4 +1,7 @@
 
+uScatter(ggplot2::diamonds$carat, ggplot2::diamonds$price)
+
+
 uPlot::uPlot(
   data = list(
     NULL,
