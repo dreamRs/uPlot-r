@@ -1,6 +1,6 @@
 Package: uPlot
 Title: Fast Interactive Charts with 'µPlot' 'JavaScript' Library
-Version: 0.0.0.9300
+Version: 0.0.0.9400
 Authors@R: 
     c(person(given = "Victor",
              family = "Perrier",
