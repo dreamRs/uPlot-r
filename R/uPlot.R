@@ -33,11 +33,11 @@
 #'   )
 #' )
 uPlot <- function(data,
-                  options = list(), 
+                  options = list(),
                   ...,
                   use_gzipped_json = FALSE,
-                  width = NULL, 
-                  height = NULL, 
+                  width = NULL,
+                  height = NULL,
                   elementId = NULL) {
 
   options <- as.list(options)
@@ -48,7 +48,10 @@ uPlot <- function(data,
   }
   if (is.null(options$series)) {
     strokes <- rep_len(palette(), length(series_nms))
-    options$series <- prepare_options_series(label = series_nms, stroke = strokes)
+    options$series <- prepare_options_series(
+      label = series_nms,
+      stroke = strokes
+    )
   }
   if (is.null(options$bands)) {
     options$bands <- list()
@@ -87,32 +90,3 @@ uPlot <- function(data,
   )
 }
 
-#' Shiny bindings for uPlot
-#'
-#' Output and render functions for using uPlot within Shiny
-#' applications and interactive Rmd documents.
-#'
-#' @param outputId output variable to read from
-#' @param width,height Must be a valid CSS unit (like \code{'100\%'},
-#'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
-#'   string and have \code{'px'} appended.
-#' @param expr An expression that generates a uPlot
-#' @param env The environment in which to evaluate \code{expr}.
-#' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
-#'   is useful if you want to save an expression in a variable.
-#'
-#' @name uPlot-shiny
-#'
-#' @importFrom htmlwidgets shinyWidgetOutput shinyRenderWidget
-#'
-#' @export
-uPlotOutput <- function(outputId, width = '100%', height = '400px'){
-  htmlwidgets::shinyWidgetOutput(outputId, 'uPlot', width, height, package = 'uPlot')
-}
-
-#' @rdname uPlot-shiny
-#' @export
-renderUPlot <- function(expr, env = parent.frame(), quoted = FALSE) {
-  if (!quoted) { expr <- substitute(expr) } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, uPlotOutput, env, quoted = TRUE)
-}

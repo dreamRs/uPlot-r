@@ -10,7 +10,7 @@
 #' @return An `htmlwidget` object of class `"uPlot"`.
 #' @export
 #'
-#' @examples
+#' @example examples/ex-uBands.R
 uBands <- function(uplot, lower, upper, fill, ...) {
   check_uplot(uplot)
   stopifnot(

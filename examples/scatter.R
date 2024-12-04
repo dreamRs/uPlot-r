@@ -44,8 +44,8 @@ uPlot::uPlot(
     ),
     series = list(
       list(),
-      list(stroke = "#DF010180", paths = htmlwidgets::JS("drawPoints")) ,
-      list(stroke = "#0431B480", paths = htmlwidgets::JS("drawPoints"))
+      list(label = "A", stroke = "#DF010180", paths = htmlwidgets::JS("drawPoints")) ,
+      list(label = "B", stroke = "#0431B480", paths = htmlwidgets::JS("drawPoints"))
     )
   )
 )
