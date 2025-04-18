@@ -7,23 +7,29 @@ uPlot::uPlot(
     NULL,
     list(
       rnorm(1e5),
-      rnorm(1e5)
+      rnorm(1e5),
+      rep(1, 1e5)
     )
   ),
   options = list(
     title = "Scatter",
     mode = 2,
-    legend = list(live = FALSE),
+    legend = list(live = TRUE),
     scales = list(
       x = list(time = FALSE),
       y = list()
     ),
     series = list(
       list(),
-      list(stroke = "#DF0101", paths = htmlwidgets::JS("drawPoints"))
+      list(stroke = "#DF0101", paths = htmlwidgets::JS("drawPoints3"))
+    ),
+    hooks = list(
+      drawClear = list(htmlwidgets::JS("drawClear3"))
     )
   )
 )
+
+
 
 uPlot::uPlot(
   data = list(

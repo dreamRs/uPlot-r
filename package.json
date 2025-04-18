@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/pvictor/uPlot#readme",
   "devDependencies": {
+    "@timohausmann/quadtree-js": "^1.2.6",
     "css-loader": "^6.7.1",
     "pako": "^2.1.0",
     "style-loader": "^3.3.1",
