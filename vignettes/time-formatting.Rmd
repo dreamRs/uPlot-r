@@ -1,0 +1,165 @@
+---
+title: "Time formatting"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Time formatting}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(uPlot)
+```
+
+Date-time formats available and R equivalent:
+
+  * YYYY:	%Y, e.g. 2025
+  * YY: %y, e.g. 25
+  * MMMM:	%B, e.g. July
+  * MMM: %b, e.g. Jul
+  * MM:	%m, e.g. 07
+  * M: ?, e.g. 7
+  * DD: %d, e.g. 09
+  * D: %e, e.g. 9,
+  * WWWW:	%A, e.g. Monday
+  * WWW: %a, e.g. Mon
+  * HH: %H, e.g. 03
+  * H: ?, e.g. 3  (unpadded)
+  * h: %I , e.g. 9 (12hr, unpadded)
+  * AA:	%P , e.g. AM
+  * aa:	%p , e.g. am
+  * mm: %m , e.g. 08
+  * m: ? , e.g. 8 (unpadded)
+  * ss: %s , e.g. 04
+  * s: ? , e.g. 4 (unpadded)
+  * fff:	milliseconds, 374
+
+
+
+## Format date-time globally
+
+Use the same format in legend and axes : 
+
+```{r fmt-global}
+uPlot(
+  data = eco2mix[1:150, c(1, 2, 6)],
+  options = list(
+    fmtDate = htmlwidgets::JS("tpl => uPlot.fmtDate('{DD}/{MM}\\n{H}h');")
+  )
+)
+```
+
+Change months and days labels : 
+
+```{r months-names}
+uPlot(
+  data = temperatures[1:150, c(1, 2)],
+  options = list(
+    fmtDate = htmlwidgets::JS(
+      sprintf(
+        "tpl => uPlot.fmtDate('{WWW} {DD}\\n{MMMM}', %s);",
+        jsonlite::toJSON(list(
+          MMMM = c("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"),
+          MMM = c("jan","fév","mar","avr","mai","juin","juil","août","sept","oct","nov", "déc"),
+          WWWW = c("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"),
+          WWW = c("dim","lun","mar","mer","jeu","ven","sam")
+        ))
+      )
+    )
+  )
+)
+```
+
+
+
+## Format legend
+
+Specify format to use in date-time serie options :
+
+```{r fmt-legend}
+uPlot(eco2mix[1:150, c(1, 2, 6)]) %>%
+  uSeries(
+    name = "datetime", # column name
+    value = "{DD}/{MM}/{YYYY} at {H}h"
+  )
+```
+
+
+## Format y axis
+
+Always use same format for axis ticks : 
+
+```{r y-axis-same}
+uPlot(eco2mix[1:950, c(1, 2, 6)]) %>%
+  uAxesX(
+    values = "{DD}/{MM} {H}h"
+  )
+```
+
+
+Specify a custom array to highlight breakpoints and deal with different levels of zoom : 
+
+```{r y-axis-custom}
+uPlot(eco2mix[seq_len(5e4), c(1, 2, 6)], use_gzipped_json = TRUE) %>%
+  uAxesX(
+    values = list(
+      #    tick incr        Default        year                         month day                     hour  min           sec   mode
+      list(3600 * 24 * 365, "{YYYY}",      NULL,                        NULL, NULL,                   NULL, NULL,         NULL, 1),
+      list(3600 * 24 * 28,  "{MMM}",       "\n{YYYY}",                  NULL, NULL,                   NULL, NULL,         NULL, 1),
+      list(3600 * 24,       "{MM}/{DD}",   "\n{YYYY}",                  NULL, NULL,                   NULL, NULL,         NULL, 1),
+      list(3600,            "{H}h",        "\n{MM}/{DD}/{YY}",          NULL, "\n{MM}/{DD}",          NULL, NULL,         NULL, 1),
+      list(60,              "{H}:{mm}",    "\n{MM}/{DD}/{YY}",          NULL, "\n{MM}/{DD}",          NULL, NULL,         NULL, 1),
+      list(1,               ":{ss}",       "\n{MM}/{DD}/{YY} {H}:{mm}", NULL, "\n{MM}/{DD} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1),
+      list(0.001,           ":{ss}.{fff}", "\n{MM}/{DD}/{YY} {H}:{mm}", NULL, "\n{MM}/{DD} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1)
+    )
+  )
+```
+
+
+Custom month names combined with axis formatting:
+
+```{r y-axis-months}
+uPlot(
+  data = eco2mix[seq_len(5e4), c(1, 2, 6)],
+  use_gzipped_json = TRUE,
+  options = list(
+    fmtDate = htmlwidgets::JS(
+      sprintf(
+        "tpl => uPlot.fmtDate(tpl, %s);",
+        jsonlite::toJSON(list(
+          MMMM = c("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"),
+          MMM = c("jan","fév","mar","avr","mai","juin","juil","août","sept","oct","nov", "déc"),
+          WWWW = c("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"),
+          WWW = c("dim","lun","mar","mer","jeu","ven","sam")
+        ))
+      )
+    )
+  )
+) %>%
+  uAxesX(
+    values = list(
+      #    tick incr        Default        year                         month day                     hour  min           sec   mode
+      list(3600 * 24 * 365, "{YYYY}",      NULL,                        NULL, NULL,                   NULL, NULL,         NULL, 1),
+      list(3600 * 24 * 28,  "{MMM}",       "\n{YYYY}",                  NULL, NULL,                   NULL, NULL,         NULL, 1),
+      list(3600 * 24,       "{MM}/{DD}",   "\n{YYYY}",                  NULL, NULL,                   NULL, NULL,         NULL, 1),
+      list(3600,            "{H}h",        "\n{MM}/{DD}/{YY}",          NULL, "\n{MM}/{DD}",          NULL, NULL,         NULL, 1),
+      list(60,              "{H}:{mm}",    "\n{MM}/{DD}/{YY}",          NULL, "\n{MM}/{DD}",          NULL, NULL,         NULL, 1),
+      list(1,               ":{ss}",       "\n{MM}/{DD}/{YY} {H}:{mm}", NULL, "\n{MM}/{DD} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1),
+      list(0.001,           ":{ss}.{fff}", "\n{MM}/{DD}/{YY} {H}:{mm}", NULL, "\n{MM}/{DD} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1)
+    )
+  )
+```
+
+Note that in `uPlot.fmtDate`, first argument is `tpl` which is default formatting.
+
+
+
+See https://github.com/leeoniya/uPlot/tree/master/docs for more documentation.
+

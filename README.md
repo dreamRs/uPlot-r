@@ -52,16 +52,13 @@ Area ranges examples :
 uPlot(
   data = temperatures,
   options = list(
-    title = "Temperatures in 2022 with range from 2018 to 2021",
-    axes = list(
-      list(),
-      list(
-        label = "Temperature in degree celsius",
-        values = htmlwidgets::JS("function(u, vals) {return vals.map(v => v + '°C');}")
-      )
-    )
+    title = "Temperatures in 2022 with range from 2018 to 2021"
   )
 ) %>% 
+  uAxesY(
+    label = "Temperature in degree celsius",
+    values = htmlwidgets::JS("function(u, vals) {return vals.map(v => v + '°C');}")
+  ) %>% 
   uBands("low", "high", fill = "#8485854D") %>% 
   uSeries("temperature", label = "Temperature (°C)", stroke = "red", width = 2) %>% 
   uSeries("low", label = "Low", stroke = "#848585", dash = c(8, 2)) %>% 
@@ -76,16 +73,13 @@ uPlot(
 uPlot(
   data = temperatures[, c(1, 2, 5)],
   options = list(
-    title = "Temperatures in 2022 compared to average from previous years",
-    axes = list(
-      list(),
-      list(
-        label = "Temperature in degree celsius",
-        values = htmlwidgets::JS("function(u, vals) {return vals.map(v => v + '°C');}")
-      )
-    )
+    title = "Temperatures in 2022 compared to average from previous years"
   )
 ) %>% 
+  uAxesY(
+    label = "Temperature in degree celsius",
+    values = htmlwidgets::JS("function(u, vals) {return vals.map(v => v + '°C');}")
+  ) %>% 
   uBands("temperature", "average", fill = "#F681804D") %>%
   uBands("average", "temperature", fill = "#2F64FF4D") %>% 
   uSeries(
