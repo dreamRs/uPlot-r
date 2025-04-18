@@ -2,6 +2,8 @@
 
 export("%>%")
 export(renderUPlot)
+export(uAxesX)
+export(uAxesY)
 export(uBands)
 export(uColors)
 export(uPlot)

@@ -56,6 +56,9 @@ uPlot <- function(data,
   if (is.null(options$bands)) {
     options$bands <- list()
   }
+  if (is.null(options$axes)) {
+    options$axes <- list()
+  }
 
   x <- list(
     config = list(
