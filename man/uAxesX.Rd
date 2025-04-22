@@ -46,4 +46,11 @@ uPlot(eco2mix[1:150, c(1, 2, 6)]) \%>\%
     ),
     stroke = "green" # label color
   )
+
+
+# don't show grid lines
+uPlot(eco2mix[1:150, c(1, 2, 6)]) \%>\%
+  uAxesX(
+    grid = list(show = FALSE)
+  )
 }

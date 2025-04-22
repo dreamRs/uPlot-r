@@ -14,22 +14,23 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   output$plot <- renderUPlot({
-    uPlot::uPlot(
-      data = list(
-        as.numeric(eco2mix$date),
-        eco2mix$consumption
-      ),
+    uPlot(
+      data = eco2mix[, c("datetime", "consumption")],
       options = list(
-        title = "Electricity production (2012 - 2020)",
-        series = list(
-          list(label = "Time"),
-          list(label = "Consumption (MW)", stroke = "#0174DF")
-        )
+        title = "Electricity production (2012 - 2020)"
       )
-    )
+    ) %>%
+      uSeries(
+        name = "datetime",
+        label = "Datetime"
+      ) %>%
+      uSeries(
+        name = "consumption",
+        label = "Consumption (MW)",
+        stroke = "#0174DF"
+      )
   })
 }
 
-if (interactive()) {
+if (interactive())
   shinyApp(ui, server)
-}

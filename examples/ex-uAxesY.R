@@ -27,3 +27,22 @@ uPlot(eco2mix[1:150, c(1, 2, 6)]) %>%
     ),
     stroke = "green" # label color
   )
+
+
+# don't show grid
+uPlot(eco2mix[1:150, c(1, 2, 6)]) %>%
+  uAxesY(
+    grid = list(
+      show = FALSE
+    )
+  )
+
+# grid style
+uPlot(eco2mix[1:150, c(1, 2, 6)]) %>%
+  uAxesY(
+    grid = list(
+      stroke = "#000",
+      width = 5,
+      dash = c(4, 2)
+    )
+  )
