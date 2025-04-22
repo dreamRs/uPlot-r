@@ -176,6 +176,36 @@ if (HTMLWidgets.shinyMode) {
       plot.setData(obj.data);
     }
   });
+  Shiny.addCustomMessageHandler("uplot-setSeries", function(obj) {
+    var plot = utils.getWidget(obj.id);
+    if (typeof plot != "undefined") {
+      plot.setSeries(obj.seriesIdx, obj.options);
+    }
+  });
+  Shiny.addCustomMessageHandler("uplot-addSeries", function(obj) {
+    var plot = utils.getWidget(obj.id);
+    if (typeof plot != "undefined") {
+      plot.addSeries(obj.options, obj.seriesIdx);
+    }
+  });
+  Shiny.addCustomMessageHandler("uplot-delSeries", function(obj) {
+    var plot = utils.getWidget(obj.id);
+    if (typeof plot != "undefined") {
+      plot.delSeries(obj.seriesIdx);
+    }
+  });
+  Shiny.addCustomMessageHandler("uplot-setScale", function(obj) {
+    var plot = utils.getWidget(obj.id);
+    if (typeof plot != "undefined") {
+      plot.setScale(obj.scaleKey, obj.limits);
+    }
+  });
+  Shiny.addCustomMessageHandler("uplot-redraw", function(obj) {
+    var plot = utils.getWidget(obj.id);
+    if (typeof plot != "undefined") {
+      plot.redraw(obj.rebuildPaths, obj.recalcAxes);
+    }
+  });
 }
 
 export { uPlot, drawPoints };

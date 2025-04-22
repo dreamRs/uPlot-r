@@ -31,11 +31,11 @@ server <- function(input, output, session) {
       )
     ) %>%
       uSeries(
-        name = "datetime",
+        serie = "datetime",
         label = "Datetime"
       ) %>%
       uSeries(
-        name = "consumption",
+        serie = "consumption",
         label = "Consumption (MW)",
         stroke = "#0174DF"
       )

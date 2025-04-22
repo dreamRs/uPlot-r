@@ -32,7 +32,7 @@
 #'     )
 #'   )
 #' )
-uPlot <- function(data,
+uPlot <- function(data = NULL,
                   options = list(),
                   ...,
                   use_gzipped_json = FALSE,

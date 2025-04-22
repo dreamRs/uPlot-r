@@ -86,7 +86,7 @@ Specify format to use in date-time serie options :
 ```{r fmt-legend}
 uPlot(eco2mix[1:150, c(1, 2, 6)]) %>%
   uSeries(
-    name = "datetime", # column name
+    serie = "datetime", # column name
     value = "{DD}/{MM}/{YYYY} at {H}h"
   )
 ```

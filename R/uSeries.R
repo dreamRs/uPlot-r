@@ -2,7 +2,7 @@
 #' Series options
 #'
 #' @param uplot Chart created with [uPlot()].
-#' @param name Name of the serie (column's name in data).
+#' @param serie Name (column's name in data) or index of the serie.
 #' @param label Label to display in legend.
 #' @param stroke Stroke color of the line.
 #' @param ... Other options.
@@ -13,12 +13,16 @@
 #' @importFrom utils modifyList
 #'
 #' @example examples/ex-uSeries.R
-uSeries <- function(uplot, name, label = NULL, stroke = NULL, ...) {
+uSeries <- function(uplot, serie, label = NULL, stroke = NULL, ...) {
   check_uplot(uplot)
   stopifnot(
-    "'name' must be a character of length 1" = is.character(name) & identical(length(name), 1L)
+    "'name' must be a character of length 1" = identical(length(serie), 1L)
   )
-  serie_index <- find_serie_index(uplot, name)
+  if (is.character(serie)) {
+    serie_index <- find_serie_index(uplot, serie)
+  } else {
+    serie_index <- as.numeric(serie)
+  }
   uplot$x$config$options$series[[serie_index]] <- modifyList(
     x = uplot$x$config$options$series[[serie_index]],
     val = drop_nulls(list(
@@ -63,7 +67,7 @@ find_serie_index <- function(uplot, name) {
 uColors <- function(uplot, ...) {
   args <- list(...)
   for (i in seq_along(args)) {
-    uplot <- uSeries(uplot, name = names(args)[i], stroke = args[[i]])
+    uplot <- uSeries(uplot, serie = names(args)[i], stroke = args[[i]])
   }
   uplot
 }

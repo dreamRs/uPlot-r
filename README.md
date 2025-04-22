@@ -83,14 +83,14 @@ uPlot(
   uBands("temperature", "average", fill = "#F681804D") %>%
   uBands("average", "temperature", fill = "#2F64FF4D") %>% 
   uSeries(
-    name = "temperature",
+    serie = "temperature",
     label = "Temperature 2022", 
     stroke = "red", 
     width = 2,
     value = htmlwidgets::JS("function(u, v) {return v + '°C';}")
   ) %>% 
   uSeries(
-    name = "average",
+    serie = "average",
     label = "Average 2018-2021",
     stroke = "black",
     width = 2,

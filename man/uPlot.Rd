@@ -5,7 +5,7 @@
 \title{uPlot}
 \usage{
 uPlot(
-  data,
+  data = NULL,
   options = list(),
   ...,
   use_gzipped_json = FALSE,

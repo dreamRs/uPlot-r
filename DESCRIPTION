@@ -23,7 +23,8 @@ RoxygenNote: 7.3.2
 Imports: 
     htmlwidgets,
     jsonlite,
-    magrittr
+    magrittr,
+    shiny
 Depends: 
     R (>= 2.10)
 LazyData: true

@@ -4,12 +4,12 @@
 \alias{uSeries}
 \title{Series options}
 \usage{
-uSeries(uplot, name, label = NULL, stroke = NULL, ...)
+uSeries(uplot, serie, label = NULL, stroke = NULL, ...)
 }
 \arguments{
 \item{uplot}{Chart created with \code{\link[=uPlot]{uPlot()}}.}
 
-\item{name}{Name of the serie (column's name in data).}
+\item{serie}{Name (column's name in data) or index of the serie.}
 
 \item{label}{Label to display in legend.}
 
@@ -28,7 +28,7 @@ Series options
 # Change label and color
 uPlot(temperatures[, c("date", "temperature")]) \%>\%
   uSeries(
-    name = "temperature",
+    serie = "temperature",
     label = "Temperature in 2022",
     stroke = "steelblue"
   )
@@ -36,7 +36,7 @@ uPlot(temperatures[, c("date", "temperature")]) \%>\%
 # Hide a serie at start
 uPlot(temperatures) \%>\%
   uSeries(
-    name = "temperature",
+    serie = "temperature",
     show = FALSE
   )
 
@@ -44,21 +44,21 @@ uPlot(temperatures) \%>\%
 # default
 uPlot(temperatures[11:40, c("date", "temperature")]) \%>\%
   uSeries(
-    name = "temperature",
+    serie = "temperature",
     paths = JS("uPlot.paths.linear()"),
     points = list(show = TRUE)
   )
 # spline curve
 uPlot(temperatures[11:40, c("date", "temperature")]) \%>\%
   uSeries(
-    name = "temperature",
+    serie = "temperature",
     paths = JS("uPlot.paths.spline()"),
     points = list(show = TRUE)
   )
 # stepped line
 uPlot(temperatures[11:40, c("date", "temperature")]) \%>\%
   uSeries(
-    name = "temperature",
+    serie = "temperature",
     paths = JS("uPlot.paths.stepped({align: 1})"),
     points = list(show = TRUE)
   )
