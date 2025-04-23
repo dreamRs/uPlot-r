@@ -1,0 +1,113 @@
+---
+title: "Zoom options"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Zoom options}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(uPlot)
+```
+
+
+
+## X only (default)
+
+```{r x-only}
+uPlot(temperatures[, c(1, 2)], use_gzipped_json = TRUE)
+```
+
+
+## Y only
+
+```{r y-only}
+uPlot(temperatures[, c(1, 2)], use_gzipped_json = TRUE) %>%
+  uCursor(
+    drag = list(y = TRUE, x = FALSE)
+  )
+```
+
+
+## X or Y (adaptive)
+
+```{r x-or-y-adaptative}
+uPlot(temperatures[, c(1, 2)], use_gzipped_json = TRUE) %>%
+  uCursor(
+    drag = list(y = TRUE, x = TRUE, uni = JS("Infinity"))
+  )
+```
+
+
+## X or Y (omni)
+
+```{r x-or-y-omni}
+uPlot(temperatures[, c(1, 2)], use_gzipped_json = TRUE) %>%
+  uCursor(
+    drag = list(y = TRUE, x = TRUE)
+  )
+```
+
+
+## Wheel Zoom & Drag
+
+```{r wheel}
+uPlot(
+  data = temperatures[, c(1, 2)],
+  use_gzipped_json = TRUE,
+  options = list(
+    plugins = list(
+      JS("wheelZoomPlugin({factor: 0.75})")
+    )
+  )
+)
+```
+
+
+
+## Range selector
+
+```{r range-selector, results='hold'}
+# main chart
+uPlot(data = temperatures[, c(1, 2)]) %>%
+  uCursor(
+    sync = list(
+      key = "mysynckey"
+    )
+  )
+
+# ranger chart
+uPlot(
+  height = "85px",
+  data = temperatures[, c(1, 2)],
+  options = list(
+    legend = list(show = FALSE)
+  )
+) %>%
+  uCursor(
+    drag = list(
+      setScale = FALSE,
+      x = TRUE,
+      y = FALSE
+    ),
+    sync = list(
+      key = "mysynckey"
+    )
+  ) %>%
+  uAxesX(show = FALSE) %>%
+  uAxesY(
+    stroke = "#FFFFFF",
+    grid = list(show = FALSE),
+    ticks = list(show = FALSE)
+  )
+```
+
+
