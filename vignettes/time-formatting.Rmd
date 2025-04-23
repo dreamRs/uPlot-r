@@ -107,7 +107,9 @@ uPlot(eco2mix[1:950, c(1, 2, 6)]) %>%
 Specify a custom array to highlight breakpoints and deal with different levels of zoom : 
 
 ```{r y-axis-custom}
-uPlot(eco2mix[seq_len(5e4), c(1, 2, 6)], use_gzipped_json = TRUE) %>%
+eco2mix %>% 
+  subset(format(datetime, "%Y") == "2020", select = c(1, 2, 6)) %>% 
+  uPlot(use_gzipped_json = TRUE) %>%
   uAxesX(
     values = list(
       #    tick incr        Default        year                         month day                     hour  min           sec   mode
@@ -126,23 +128,24 @@ uPlot(eco2mix[seq_len(5e4), c(1, 2, 6)], use_gzipped_json = TRUE) %>%
 Custom month names combined with axis formatting:
 
 ```{r y-axis-months}
-uPlot(
-  data = eco2mix[seq_len(5e4), c(1, 2, 6)],
-  use_gzipped_json = TRUE,
-  options = list(
-    fmtDate = htmlwidgets::JS(
-      sprintf(
-        "tpl => uPlot.fmtDate(tpl, %s);",
-        jsonlite::toJSON(list(
-          MMMM = c("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"),
-          MMM = c("jan","fév","mar","avr","mai","juin","juil","août","sept","oct","nov", "déc"),
-          WWWW = c("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"),
-          WWW = c("dim","lun","mar","mer","jeu","ven","sam")
-        ))
+eco2mix %>% 
+  subset(format(datetime, "%Y") == "2020", select = c(1, 2, 6)) %>% 
+  uPlot(
+    use_gzipped_json = TRUE,
+    options = list(
+      fmtDate = htmlwidgets::JS(
+        sprintf(
+          "tpl => uPlot.fmtDate(tpl, %s);",
+          jsonlite::toJSON(list(
+            MMMM = c("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"),
+            MMM = c("jan","fév","mar","avr","mai","juin","juil","août","sept","oct","nov", "déc"),
+            WWWW = c("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"),
+            WWW = c("dim","lun","mar","mer","jeu","ven","sam")
+          ))
+        )
       )
     )
-  )
-) %>%
+  ) %>%
   uAxesX(
     values = list(
       #    tick incr        Default        year                         month day                     hour  min           sec   mode

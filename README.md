@@ -20,14 +20,14 @@ remotes::install_github("dreamRs/uPlot-r")
 
 ## Example
 
-Here's a time series in half-hourly steps over 11 years, representing a total of 1,710,612 points (9 series of 190,068).
+Here's a time series in hourly steps over 12 years, representing a total of 874,584 points (9 series of 97,176).
 
 ```r
 library(uPlot)
 uPlot(
   data = eco2mix[, c(1, 3:11)],
   options = list(
-    title = "Electricity production by sources in France (2012 - 2022)"
+    title = "Electricity production by sources in France (2012 - 2023)"
   )
 ) %>% 
   uColors(

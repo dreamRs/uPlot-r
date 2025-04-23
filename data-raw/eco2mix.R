@@ -28,9 +28,9 @@ eco2mix <- fread(file = "data-raw/input/eco2mix-national-cons-def.csv")
 eco2mix <- eco2mix[, c(5, 6, 9:17)]
 setnames(eco2mix, c("datetime", "consumption", "fuel", "coal", "gas", "nuclear", "wind", "solar", "hydraulic", "pumping", "bioenergies"))
 
-eco2mix_tr <- fread(file = "data-raw/input/eco2mix-national-tr.csv")
-eco2mix_tr <- eco2mix_tr[, c(5, 6, 9:17)]
-setnames(eco2mix_tr, c("datetime", "consumption", "fuel", "coal", "gas", "nuclear", "wind", "solar", "hydraulic", "pumping", "bioenergies"))
+# eco2mix_tr <- fread(file = "data-raw/input/eco2mix-national-tr.csv")
+# eco2mix_tr <- eco2mix_tr[, c(5, 6, 9:17)]
+# setnames(eco2mix_tr, c("datetime", "consumption", "fuel", "coal", "gas", "nuclear", "wind", "solar", "hydraulic", "pumping", "bioenergies"))
 
 eco2mix <- rbind(eco2mix, eco2mix_tr)
 
@@ -38,6 +38,8 @@ eco2mix[, datetime := fasttime::fastPOSIXct(datetime)]
 eco2mix <- eco2mix[!is.na(consumption)]
 eco2mix <- eco2mix[minute(datetime) != 15]
 eco2mix <- eco2mix[minute(datetime) != 45]
+eco2mix <- eco2mix[minute(datetime) != 15]
+eco2mix <- eco2mix[minute(datetime) == 0]
 # eco2mix <- melt(data = eco2mix, id.vars = 1, variable.name = "source", value.name = "conso", na.rm = TRUE)
 
 
@@ -48,7 +50,7 @@ setDF(eco2mix)
 
 # Use data ----------------------------------------------------------------
 
-usethis::use_data(eco2mix, internal = FALSE, overwrite = TRUE, compress = "xz")
+usethis::use_data(eco2mix, internal = FALSE, overwrite = TRUE, compress = "bzip2")
 
 
 
