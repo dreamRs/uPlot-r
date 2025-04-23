@@ -5,9 +5,9 @@
 \alias{uSetSeries}
 \alias{uAddSeries}
 \alias{uDelSeries}
-\title{Update series to a chart via proxy}
+\title{Update chart series}
 \usage{
-uSetSeries(uplot, seriesIdx, show = TRUE, focus = NULL)
+uSetSeries(uplot, seriesIdx, show = NULL, focus = NULL)
 
 uAddSeries(uplot, seriesIdx, ...)
 
@@ -26,7 +26,7 @@ uDelSeries(uplot, seriesIdx)
 An \code{htmlwidget} object of class \code{"uPlot"} or a \code{uProxy} object.
 }
 \description{
-Update series to a chart via proxy
+Update chart series
 }
 \examples{
 uPlot() \%>\%

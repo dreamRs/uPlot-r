@@ -2,7 +2,7 @@
 % Please edit documentation in R/proxy.R
 \name{uSetData}
 \alias{uSetData}
-\title{Set data to a chart}
+\title{Set chart data}
 \usage{
 uSetData(uplot, data)
 }
@@ -15,7 +15,7 @@ uSetData(uplot, data)
 An \code{htmlwidget} object of class \code{"uPlot"} or a \code{uProxy} object.
 }
 \description{
-Set data to a chart
+Set chart data
 }
 \examples{
 uPlot() \%>\%

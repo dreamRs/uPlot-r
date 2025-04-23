@@ -93,7 +93,7 @@ uRedraw <- function(uplot, rebuildPaths = TRUE, recalcAxes = TRUE) {
 }
 
 
-#' Set data to a chart
+#' Set chart data
 #'
 #' @param uplot Chart created with [uPlot()] or [uProxy()].
 #' @param data The `data.frame` to use in chart.
@@ -131,7 +131,7 @@ uSetData <- function(uplot, data) {
 }
 
 
-#' Update series to a chart via proxy
+#' Update chart series
 #'
 #' @param uplot Chart created with [uPlot()] or [uProxy()].
 #' @param seriesIdx Index of the serie to set.
@@ -149,7 +149,7 @@ uSetData <- function(uplot, data) {
 #'
 #' @example examples/shiny-proxy-series-visibility.R
 #' @example examples/shiny-proxy-series-deladd.R
-uSetSeries <- function(uplot, seriesIdx, show = TRUE, focus = NULL) {
+uSetSeries <- function(uplot, seriesIdx, show = NULL, focus = NULL) {
   if (is_proxy(uplot)) {
     proxy <- .call_proxy(
       proxy = uplot,
@@ -198,3 +198,42 @@ uDelSeries <- function(uplot, seriesIdx) {
   warning("uDelSeries: no method for uPlot object, can only be used with uProxy()")
   return(uplot)
 }
+
+
+
+
+#' Set the scale of a chart
+#'
+#' @param uplot Chart created with [uProxy()].
+#' @param min,max Minimum and maximum values to display on the scale.
+#' @param scaleKey Scale key: "x" or "y".
+#'
+#' @return An `htmlwidget` object of class `"uPlot"` or a `uProxy` object.
+#' @export
+#'
+#' @example examples/shiny-proxy-setscale.R
+uSetScale <- function(uplot, min, max, scaleKey = "x") {
+  min <- if (inherits(min, "Date")) {
+    as.numeric(min) * 86400
+  } else {
+    as.numeric(min)
+  }
+  max <- if (inherits(max, "Date")) {
+    as.numeric(max) * 86400
+  } else {
+    as.numeric(max)
+  }
+  if (is_proxy(uplot)) {
+    proxy <- .call_proxy(
+      proxy = uplot,
+      name = "setScale",
+      scaleKey = scaleKey,
+      limits = list(min = min, max = max)
+    )
+    return(proxy)
+  }
+  check_uplot(uplot)
+  warning("uSetScale: no method for uPlot object, can only be used with uProxy()")
+  return(uplot)
+}
+
