@@ -57,7 +57,7 @@ uPlot(
 ) %>% 
   uAxesY(
     label = "Temperature in degree celsius",
-    values = htmlwidgets::JS("function(u, vals) {return vals.map(v => v + '°C');}")
+    values = JS("function(u, vals) {return vals.map(v => v + '°C');}")
   ) %>% 
   uBands("low", "high", fill = "#8485854D") %>% 
   uSeries("temperature", label = "Temperature (°C)", stroke = "red", width = 2) %>% 
@@ -78,7 +78,7 @@ uPlot(
 ) %>% 
   uAxesY(
     label = "Temperature in degree celsius",
-    values = htmlwidgets::JS("function(u, vals) {return vals.map(v => v + '°C');}")
+    values = JS("function(u, vals) {return vals.map(v => v + '°C');}")
   ) %>% 
   uBands("temperature", "average", fill = "#F681804D") %>%
   uBands("average", "temperature", fill = "#2F64FF4D") %>% 
@@ -87,14 +87,14 @@ uPlot(
     label = "Temperature 2022", 
     stroke = "red", 
     width = 2,
-    value = htmlwidgets::JS("function(u, v) {return v === null ? '--' : uPlot.fmtNum(v) + '°C';}")
+    value = JS("function(u, v) {return v === null ? '--' : uPlot.fmtNum(v) + '°C';}")
   ) %>% 
   uSeries(
     serie = "average",
     label = "Average 2018-2021",
     stroke = "black",
     width = 2,
-    value = htmlwidgets::JS("function(u, v) {return v === null ? '--' : uPlot.fmtNum(v) + '°C';}")
+    value = JS("function(u, v) {return v === null ? '--' : uPlot.fmtNum(v) + '°C';}")
   )
 ```
 

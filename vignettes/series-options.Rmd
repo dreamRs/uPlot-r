@@ -1,0 +1,154 @@
+---
+title: "Series options"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Series options}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(uPlot)
+```
+
+
+## Series Colors
+
+To color a serie, use `stroke` argument in `uSeries()`:
+
+```{r series-colors-1}
+uPlot(eco2mix[1:50, c("datetime", "wind", "hydraulic")]) %>% 
+  uSeries("wind", stroke = "#72cbb7") %>% 
+  uSeries("hydraulic", stroke = "#2672b0")
+```
+
+Or use `uColors()`:
+
+```{r series-colors-2}
+uPlot(eco2mix[1:50, c("datetime", "wind", "hydraulic")]) %>% 
+  uColors(
+    "wind" = "#72cbb7",
+    "hydraulic" = "#2672b0"
+  )
+```
+
+
+## Points
+
+Hide points with:
+
+```{r points-hide}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries("hydraulic", points = list(show = FALSE))
+```
+
+Or customize them with:
+
+```{r points-customize}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries(
+    serie = "hydraulic",
+    points = list(size = 15, fill = "red", stroke = "blue", width = 3)
+  )
+```
+
+
+
+
+## Fill colors
+
+Fill in the area underneath the series and customize the alpha value for the filling:
+
+```{r fill-color}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries("hydraulic", stroke = "#2672b0", fill = "#2672b0", alpha = 0.5)
+```
+
+
+
+## Paths
+
+Use `path` argument to modify serie appearance. Default is linear path:
+
+```{r linear-path}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries("hydraulic", paths = JS("uPlot.paths.linear()"))
+```
+
+Draw a spline:
+
+```{r spline-path}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries("hydraulic", paths = JS("uPlot.paths.spline()"))
+```
+
+Use a function that return `null` to only draw points:
+
+```{r null-path}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries("hydraulic", paths = JS("function() {return null;}"))
+```
+
+
+Stepped line with points before:
+
+```{r stepped-path-1}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries("hydraulic", paths = JS("uPlot.paths.stepped({align: 1})"))
+```
+
+
+Stepped line with points after:
+
+```{r stepped-path-2}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries("hydraulic", paths = JS("uPlot.paths.stepped({align: -1})"))
+```
+
+
+Draw bars:
+
+```{r bars-path-1}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries("hydraulic", paths = JS("uPlot.paths.bars()"))
+```
+
+
+Align bars after points and set bars size:
+
+```{r bars-path-2}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries("hydraulic", paths = JS("uPlot.paths.bars({align: 1, size: [1]})"))
+```
+
+
+Multiple options in the same time:
+
+```{r}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries(
+    serie = "hydraulic", 
+    paths = JS("uPlot.paths.bars({align: 1, size: [1]})"),
+    stroke = "#FFF", 
+    fill = "#2672b0",
+    points = list(show = FALSE)
+  )
+```
+
+
+## Line stroke and width
+
+Change the width of the line and use a stroke pattern:
+
+```{r}
+uPlot(eco2mix[1:50, c("datetime", "hydraulic")]) %>% 
+  uSeries("hydraulic", dash = c(5, 5), width = 2)
+```
+

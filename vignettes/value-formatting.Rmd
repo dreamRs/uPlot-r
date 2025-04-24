@@ -1,0 +1,63 @@
+---
+title: "Value formatting"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Value formatting}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(uPlot)
+```
+
+
+## On Y axis
+
+```{r y-axis}
+uPlot(temperatures[, c(1, 2)]) %>% 
+  uAxesY(
+    label = "Temperature in degree celsius",
+    values = htmlwidgets::JS("function(u, vals) {return vals.map(v => v + '°C');}")
+  )
+```
+
+
+## In legend
+
+```{r legend}
+uPlot(temperatures[, c(1, 2)]) %>% 
+  uSeries(
+    serie = "temperature",
+    label = "Temperature 2022", 
+    value = JS("function(u, v) {return v === null ? '--' : uPlot.fmtNum(v) + '°C';}")
+  )
+```
+
+
+## In tooltip
+
+```{r tooltip}
+uPlot(
+  data = temperatures[, c(1, 2)],
+  options = list(
+    plugins = list(
+      JS("tooltipPlugin()")
+    )
+  )
+) %>% 
+  uCursor(focus = list(prox = 10)) %>% 
+  uSeries(
+    serie = "temperature",
+    label = "Temperature 2022", 
+    value = JS("function(u, v) {return v === null ? '--' : uPlot.fmtNum(v) + '°C';}")
+  )
+```
+
