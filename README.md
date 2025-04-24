@@ -87,14 +87,14 @@ uPlot(
     label = "Temperature 2022", 
     stroke = "red", 
     width = 2,
-    value = htmlwidgets::JS("function(u, v) {return v + '°C';}")
+    value = htmlwidgets::JS("function(u, v) {return v === null ? '--' : uPlot.fmtNum(v) + '°C';}")
   ) %>% 
   uSeries(
     serie = "average",
     label = "Average 2018-2021",
     stroke = "black",
     width = 2,
-    value = htmlwidgets::JS("function(u, v) {return v + '°C';}")
+    value = htmlwidgets::JS("function(u, v) {return v === null ? '--' : uPlot.fmtNum(v) + '°C';}")
   )
 ```
 

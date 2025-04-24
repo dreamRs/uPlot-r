@@ -3,6 +3,7 @@ import uPlot from "uplot";
 import "uplot/dist/uPlot.min.css";
 import * as utils from "../modules/utils";
 import { stackedChart } from "../modules/stack";
+import { tooltipPlugin } from "../modules/tooltipPlugin";
 import { ungzip } from "pako";
 
 const resizer = el => {
@@ -239,7 +240,7 @@ HTMLWidgets.widget({
           const decodedData = new TextDecoder().decode(ungzipedData);
           data = JSON.parse(decodedData);
         }
-        console.log(data);
+        //console.log(data);
         if (x.stacked) {
           if (!options.hooks)
             options.hooks = {};
@@ -321,5 +322,5 @@ if (HTMLWidgets.shinyMode) {
   });
 }
 
-export { uPlot, drawPoints, wheelZoomPlugin };
+export { uPlot, drawPoints, wheelZoomPlugin, tooltipPlugin };
 
