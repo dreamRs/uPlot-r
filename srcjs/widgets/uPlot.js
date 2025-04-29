@@ -6,6 +6,11 @@ import { stackedChart } from "../modules/stack";
 import { tooltipPlugin } from "../modules/tooltipPlugin";
 import { wheelZoomPlugin } from "../modules/wheelZoomPlugin";
 import { ungzip } from "pako";
+import * as dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const resizer = el => {
   const func = (u, init) => {
@@ -213,5 +218,5 @@ if (HTMLWidgets.shinyMode) {
   });
 }
 
-export { uPlot, drawPoints, wheelZoomPlugin, tooltipPlugin };
+export { uPlot, drawPoints, wheelZoomPlugin, tooltipPlugin, dayjs };
 

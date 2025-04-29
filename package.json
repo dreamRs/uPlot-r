@@ -23,6 +23,7 @@
   "homepage": "https://github.com/pvictor/uPlot#readme",
   "devDependencies": {
     "css-loader": "^6.7.1",
+    "dayjs": "^1.11.13",
     "pako": "^2.1.0",
     "style-loader": "^3.3.1",
     "uplot": "^1.6.31",

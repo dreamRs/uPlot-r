@@ -51,7 +51,7 @@ Use the same format in legend and axes :
 uPlot(
   data = eco2mix[1:150, c(1, 2, 6)],
   options = list(
-    fmtDate = htmlwidgets::JS("tpl => uPlot.fmtDate('{DD}/{MM}\\n{H}h');")
+    fmtDate = JS("tpl => uPlot.fmtDate('{DD}/{MM}\\n{H}h');")
   )
 )
 ```
@@ -115,11 +115,11 @@ eco2mix %>%
       #    tick incr        Default        year                         month day                     hour  min           sec   mode
       list(3600 * 24 * 365, "{YYYY}",      NULL,                        NULL, NULL,                   NULL, NULL,         NULL, 1),
       list(3600 * 24 * 28,  "{MMM}",       "\n{YYYY}",                  NULL, NULL,                   NULL, NULL,         NULL, 1),
-      list(3600 * 24,       "{MM}/{DD}",   "\n{YYYY}",                  NULL, NULL,                   NULL, NULL,         NULL, 1),
-      list(3600,            "{H}h",        "\n{MM}/{DD}/{YY}",          NULL, "\n{MM}/{DD}",          NULL, NULL,         NULL, 1),
-      list(60,              "{H}:{mm}",    "\n{MM}/{DD}/{YY}",          NULL, "\n{MM}/{DD}",          NULL, NULL,         NULL, 1),
-      list(1,               ":{ss}",       "\n{MM}/{DD}/{YY} {H}:{mm}", NULL, "\n{MM}/{DD} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1),
-      list(0.001,           ":{ss}.{fff}", "\n{MM}/{DD}/{YY} {H}:{mm}", NULL, "\n{MM}/{DD} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1)
+      list(3600 * 24,       "{DD}/{MM}",   "\n{YYYY}",                  NULL, NULL,                   NULL, NULL,         NULL, 1),
+      list(3600,            "{H}h",        "\n{DD}/{MM}/{YY}",          NULL, "\n{DD}/{MM}",          NULL, NULL,         NULL, 1),
+      list(60,              "{H}:{mm}",    "\n{DD}/{MM}/{YY}",          NULL, "\n{DD}/{MM}",          NULL, NULL,         NULL, 1),
+      list(1,               ":{ss}",       "\n{DD}/{MM}/{YY} {H}:{mm}", NULL, "\n{DD}/{MM} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1),
+      list(0.001,           ":{ss}.{fff}", "\n{DD}/{MM}/{YY} {H}:{mm}", NULL, "\n{DD}/{MM} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1)
     )
   )
 ```
@@ -133,7 +133,7 @@ eco2mix %>%
   uPlot(
     use_gzipped_json = TRUE,
     options = list(
-      fmtDate = htmlwidgets::JS(
+      fmtDate = JS(
         sprintf(
           "tpl => uPlot.fmtDate(tpl, %s);",
           jsonlite::toJSON(list(
@@ -151,11 +151,11 @@ eco2mix %>%
       #    tick incr        Default        year                         month day                     hour  min           sec   mode
       list(3600 * 24 * 365, "{YYYY}",      NULL,                        NULL, NULL,                   NULL, NULL,         NULL, 1),
       list(3600 * 24 * 28,  "{MMM}",       "\n{YYYY}",                  NULL, NULL,                   NULL, NULL,         NULL, 1),
-      list(3600 * 24,       "{MM}/{DD}",   "\n{YYYY}",                  NULL, NULL,                   NULL, NULL,         NULL, 1),
-      list(3600,            "{H}h",        "\n{MM}/{DD}/{YY}",          NULL, "\n{MM}/{DD}",          NULL, NULL,         NULL, 1),
-      list(60,              "{H}:{mm}",    "\n{MM}/{DD}/{YY}",          NULL, "\n{MM}/{DD}",          NULL, NULL,         NULL, 1),
-      list(1,               ":{ss}",       "\n{MM}/{DD}/{YY} {H}:{mm}", NULL, "\n{MM}/{DD} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1),
-      list(0.001,           ":{ss}.{fff}", "\n{MM}/{DD}/{YY} {H}:{mm}", NULL, "\n{MM}/{DD} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1)
+      list(3600 * 24,       "{DD}/{MM}",   "\n{YYYY}",                  NULL, NULL,                   NULL, NULL,         NULL, 1),
+      list(3600,            "{H}h",        "\n{DD}/{MM}/{YY}",          NULL, "\n{DD}/{MM}",          NULL, NULL,         NULL, 1),
+      list(60,              "{H}:{mm}",    "\n{DD}/{MM}/{YY}",          NULL, "\n{DD}/{MM}",          NULL, NULL,         NULL, 1),
+      list(1,               ":{ss}",       "\n{DD}/{MM}/{YY} {H}:{mm}", NULL, "\n{DD}/{MM} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1),
+      list(0.001,           ":{ss}.{fff}", "\n{DD}/{MM}/{YY} {H}:{mm}", NULL, "\n{DD}/{MM} {H}:{mm}", NULL, "\n{H}:{mm}", NULL, 1)
     )
   )
 ```
@@ -163,6 +163,39 @@ eco2mix %>%
 Note that in `uPlot.fmtDate`, first argument is `tpl` which is default formatting.
 
 
-
 See https://github.com/leeoniya/uPlot/tree/master/docs for more documentation.
+
+
+
+## Format date-time with dayjs
+
+You can also format date-time with timezone support using the dayjs JavaScript library (see https://day.js.org/docs/en/display/format):
+
+```{r}
+eco2mix %>% 
+  subset(format(datetime, "%Y") == "2020", select = c(1, 2, 6)) %>% 
+  uPlot(
+    use_gzipped_json = TRUE,
+    options = list(
+      fmtDate = JS("(tpl) => (date) => dayjs(date).tz('Europe/Paris').format(tpl)")
+    )
+  ) %>%
+  uSeries(
+    serie = "datetime", # column name
+    value = "DD/MM/YYYY [at] H[h]" # format to be applied in legend, use [] to escape characters
+  ) %>% 
+  uAxesX(
+    values = list( # format to be applied in x-axis according to zoom level
+      #    tick incr        Default    year                month day              hour  min        sec   mode
+      list(3600 * 24 * 365, "YYYY",    NULL,               NULL, NULL,            NULL, NULL,      NULL, 1),
+      list(3600 * 24 * 28,  "MMM",     "\nYYYY",           NULL, NULL,            NULL, NULL,      NULL, 1),
+      list(3600 * 24,       "DD/MM",   "\nYYYY",           NULL, NULL,            NULL, NULL,      NULL, 1),
+      list(3600,            "HH",      "\nDD/MM/YY",       NULL, "\nDD/MM",       NULL, NULL,      NULL, 1),
+      list(60,              "HH:mm",   "\nDD/MM/YY",       NULL, "\nDD/MM",       NULL, NULL,      NULL, 1),
+      list(1,               ":ss",     "\nDD/MM/YY HH:mm", NULL, "\nDD/MM HH:mm", NULL, "\nHH:mm", NULL, 1),
+      list(0.001,           ":ss.fff", "\nDD/MM/YY HH:mm", NULL, "\nDD/MM HH:mm", NULL, "\nHH:mm", NULL, 1)
+    )
+  )
+```
+
 
