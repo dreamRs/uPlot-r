@@ -4,8 +4,12 @@ import "uplot/dist/uPlot.min.css";
 import * as utils from "../modules/utils";
 import { stackedChart } from "../modules/stack";
 import { tooltipPlugin } from "../modules/tooltipPlugin";
+import { legendAsTooltipPlugin } from "../modules/legendAsTooltipPlugin";
 import { wheelZoomPlugin } from "../modules/wheelZoomPlugin";
+import { columnHighlightPlugin } from "../modules/columnHighlightPlugin";
+import { drawPoints } from "../modules/drawPoints";
 import { drawHLine, drawVLine, drawVRect, drawHRect } from "../modules/draw";
+import { candlestickPlugin } from "../modules/candlestickPlugin";
 import { ungzip } from "pako";
 import * as dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -13,9 +17,9 @@ import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const resizer = el => {
+const resizer = (el) => {
   const func = (u, init) => {
-    const resizeObserver = new ResizeObserver(entries => {
+    const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         let adjHeight = entry.contentRect.height;
         let adjWidth = entry.contentRect.width;
@@ -33,97 +37,16 @@ const resizer = el => {
   return func;
 };
 
-
-const drawPoints = (u, seriesIdx, idx0, idx1) => {
-  const size = 5 * devicePixelRatio;
-
-  uPlot.orient(
-    u,
-    seriesIdx,
-    (
-      series,
-      dataX,
-      dataY,
-      scaleX,
-      scaleY,
-      valToPosX,
-      valToPosY,
-      xOff,
-      yOff,
-      xDim,
-      yDim,
-      moveTo,
-      lineTo,
-      rect,
-      arc
-    ) => {
-      let d = u.data[seriesIdx];
-
-      u.ctx.fillStyle = series.stroke();
-
-      let deg360 = 2 * Math.PI;
-
-      console.time("points");
-
-      //	let cir = new Path2D();
-      //	cir.moveTo(0, 0);
-      //	arc(cir, 0, 0, 3, 0, deg360);
-
-      // Create transformation matrix that moves 200 points to the right
-      //	let m = document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGMatrix();
-      //	m.a = 1;   m.b = 0;
-      //	m.c = 0;   m.d = 1;
-      //	m.e = 200; m.f = 0;
-
-      let p = new Path2D();
-
-      for (let i = 0; i < d[0].length; i++) {
-        let xVal = d[0][i];
-        let yVal = d[1][i];
-
-        if (
-          xVal >= scaleX.min &&
-          xVal <= scaleX.max &&
-          yVal >= scaleY.min &&
-          yVal <= scaleY.max
-        ) {
-          let cx = valToPosX(xVal, scaleX, xDim, xOff);
-          let cy = valToPosY(yVal, scaleY, yDim, yOff);
-
-          p.moveTo(cx + size / 2, cy);
-          //	arc(p, cx, cy, 3, 0, deg360);
-          arc(p, cx, cy, size / 2, 0, deg360);
-
-          //	m.e = cx;
-          //	m.f = cy;
-          //	p.addPath(cir, m);
-
-          //	qt.add({x: cx - 1.5, y: cy - 1.5, w: 3, h: 3, sidx: seriesIdx, didx: i});
-        }
-      }
-
-      console.timeEnd("points");
-
-      u.ctx.fill(p);
-    }
-  );
-
-  return null;
-};
-
-
-
-
 HTMLWidgets.widget({
   name: "uPlot",
 
   type: "output",
 
-  factory: function(el, width, height) {
+  factory: function (el, width, height) {
     var plot, options, data;
 
     return {
-      renderValue: function(x) {
+      renderValue: function (x) {
         if (typeof plot !== "undefined") {
           plot.destroy();
         }
@@ -133,25 +56,26 @@ HTMLWidgets.widget({
         data = x.config.data;
         if (x.use_gzipped_json) {
           const gezipedData = atob(data);
-          const gzipedDataArray = Uint8Array.from(gezipedData, c => c.charCodeAt(0));
+          const gzipedDataArray = Uint8Array.from(gezipedData, (c) =>
+            c.charCodeAt(0),
+          );
           const ungzipedData = ungzip(gzipedDataArray);
           const decodedData = new TextDecoder().decode(ungzipedData);
           data = JSON.parse(decodedData);
         }
         //console.log(data);
         if (x.stacked) {
-          if (!options.hooks)
-            options.hooks = {};
+          if (!options.hooks) options.hooks = {};
           options.hooks.init = [
-            u => {
+            (u) => {
               [...u.root.querySelectorAll(".u-legend .u-series")].forEach(
                 (el, i) => {
                   if (u.series[i]._hide) {
                     el.style.display = "none";
                   }
-                }
+                },
               );
-            }
+            },
           ];
           plot = stackedChart(
             options.title,
@@ -161,58 +85,58 @@ HTMLWidgets.widget({
             width,
             height,
             options.hooks,
-            resizer(el)
+            resizer(el),
           );
         } else {
           plot = new uPlot(options, data, resizer(el));
         }
       },
-      getWidget: function() {
+      getWidget: function () {
         return plot;
       },
-      resize: function(width, height) {}
+      resize: function (width, height) {},
     };
-  }
+  },
 });
 
 if (HTMLWidgets.shinyMode) {
-  Shiny.addCustomMessageHandler("uplot-api", function(obj) {
+  Shiny.addCustomMessageHandler("uplot-api", function (obj) {
     var plot = utils.getWidget(obj.id);
     if (typeof plot != "undefined") {
       plot[obj.name].apply(null, obj.args);
     }
   });
-  Shiny.addCustomMessageHandler("uplot-setData", function(obj) {
+  Shiny.addCustomMessageHandler("uplot-setData", function (obj) {
     var plot = utils.getWidget(obj.id);
     if (typeof plot != "undefined") {
       plot.setData(obj.data);
     }
   });
-  Shiny.addCustomMessageHandler("uplot-setSeries", function(obj) {
+  Shiny.addCustomMessageHandler("uplot-setSeries", function (obj) {
     var plot = utils.getWidget(obj.id);
     if (typeof plot != "undefined") {
       plot.setSeries(obj.seriesIdx, obj.options);
     }
   });
-  Shiny.addCustomMessageHandler("uplot-addSeries", function(obj) {
+  Shiny.addCustomMessageHandler("uplot-addSeries", function (obj) {
     var plot = utils.getWidget(obj.id);
     if (typeof plot != "undefined") {
       plot.addSeries(obj.options, obj.seriesIdx);
     }
   });
-  Shiny.addCustomMessageHandler("uplot-delSeries", function(obj) {
+  Shiny.addCustomMessageHandler("uplot-delSeries", function (obj) {
     var plot = utils.getWidget(obj.id);
     if (typeof plot != "undefined") {
       plot.delSeries(obj.seriesIdx);
     }
   });
-  Shiny.addCustomMessageHandler("uplot-setScale", function(obj) {
+  Shiny.addCustomMessageHandler("uplot-setScale", function (obj) {
     var plot = utils.getWidget(obj.id);
     if (typeof plot != "undefined") {
       plot.setScale(obj.scaleKey, obj.limits);
     }
   });
-  Shiny.addCustomMessageHandler("uplot-redraw", function(obj) {
+  Shiny.addCustomMessageHandler("uplot-redraw", function (obj) {
     var plot = utils.getWidget(obj.id);
     if (typeof plot != "undefined") {
       plot.redraw(obj.rebuildPaths, obj.recalcAxes);
@@ -220,5 +144,17 @@ if (HTMLWidgets.shinyMode) {
   });
 }
 
-export { uPlot, drawPoints, drawHLine, drawVLine, drawVRect, drawHRect, wheelZoomPlugin, tooltipPlugin, dayjs };
-
+export {
+  uPlot,
+  drawPoints,
+  drawHLine,
+  drawVLine,
+  drawVRect,
+  drawHRect,
+  wheelZoomPlugin,
+  tooltipPlugin,
+  legendAsTooltipPlugin,
+  columnHighlightPlugin,
+  candlestickPlugin,
+  dayjs,
+};
