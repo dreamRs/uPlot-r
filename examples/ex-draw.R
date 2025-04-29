@@ -1,0 +1,102 @@
+library(uPlot)
+
+uPlot(eco2mix[1:24, c(1, 2)]) %>%
+  uHookVLine(
+    xintercept = as.POSIXct("2012-01-01 08:00:00"),
+    color = "orange"
+  ) %>%
+  uHookVLine(
+    xintercept = as.POSIXct("2012-01-01 14:00:00"),
+    color = "magenta", dash = c(5, 5)
+  ) %>%
+  uHookHLine(
+    yintercept = 50000,
+    color = "green",
+    width = 3
+  ) %>%
+  uHookHLine(
+    yintercept = 56000,
+    color = "blue", dash = c(5, 5)
+  ) %>%
+  uHookVRect(
+    xmin = as.POSIXct("2012-01-01 02:00:00"),
+    xmax = as.POSIXct("2012-01-01 05:00:00"),
+    fill = "grey",
+    alpha = 0.3
+  ) %>%
+  uHookHRect(
+    ymin = 45000,
+    ymax = 46500,
+    fill = "red",
+    alpha = 0.1
+  )
+
+
+# Equivalent with JS functions
+uPlot(eco2mix[1:24, c(1, 2)]) %>%
+  uOptions(
+    hooks = list(
+      drawAxes = list(
+        # Horizontal lines
+        JS("drawHLine({yintercept: 50000, color: 'green', width: 3})"),
+        JS("drawHLine({yintercept: 56000, color: 'blue', dash: [5, 5]})"),
+        # Vertical line
+        JS("drawVLine({xintercept: 1325383200, color: 'orange', width: 3})"),
+        # Vertical band
+        JS("drawVRect({xmin: 1325419200, xmax: 1325430000, fill: 'grey', alpha: 0.3})"),
+        # Horizontal band
+        JS("drawHRect({ymin: 45000, ymax: 46500, fill: 'red', alpha: 0.1})")
+      )
+    )
+  )
+
+# Full JS function to draw horizontal line
+uPlot(eco2mix[1:24, c(1, 2)]) %>%
+  uOptions(
+    hooks = list(
+      draw = list(
+        JS(
+          "u => {
+            let y = u.valToPos(50000, 'y', true);
+            let xl = u.valToPos(u.scales.x.min, 'x', true);
+            let xr = u.valToPos(u.scales.x.max, 'x', true);
+            u.ctx.save();
+            u.ctx.beginPath();
+            u.ctx.moveTo(xl, y);
+            u.ctx.lineTo(xr, y);
+            u.ctx.strokeStyle = 'blue';
+            u.ctx.lineWidth = 2;
+            u.ctx.setLineDash([5, 5]);
+            u.ctx.stroke();
+            u.ctx.restore();
+          }"
+        )
+      )
+    )
+  )
+
+# JS function to draw a rectangle
+# (use unix timestamp on x axis)
+uPlot(eco2mix[1:24, c(1, 2)]) %>%
+  uOptions(
+    hooks = list(
+      drawAxes = list(
+        JS(
+          "u => {
+            let yt = u.valToPos(u.scales.y.max, 'y', true);
+            let yb = u.valToPos(u.scales.y.min, 'y', true);
+            let xl = u.valToPos(1325397600, 'x', true);
+            let xr = u.valToPos(1325412000, 'x', true);
+            u.ctx.save();
+            u.ctx.beginPath();
+            u.ctx.fillStyle = 'red';
+            u.ctx.globalAlpha = 0.1;
+            u.ctx.fillRect(xl, yt, xr - xl, yb - yt);
+            u.ctx.restore();
+          }"
+        )
+      )
+    )
+  )
+
+

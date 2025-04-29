@@ -5,6 +5,7 @@ import * as utils from "../modules/utils";
 import { stackedChart } from "../modules/stack";
 import { tooltipPlugin } from "../modules/tooltipPlugin";
 import { wheelZoomPlugin } from "../modules/wheelZoomPlugin";
+import { drawHLine, drawVLine, drawVRect, drawHRect } from "../modules/draw";
 import { ungzip } from "pako";
 import * as dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -31,6 +32,7 @@ const resizer = el => {
   };
   return func;
 };
+
 
 const drawPoints = (u, seriesIdx, idx0, idx1) => {
   const size = 5 * devicePixelRatio;
@@ -218,5 +220,5 @@ if (HTMLWidgets.shinyMode) {
   });
 }
 
-export { uPlot, drawPoints, wheelZoomPlugin, tooltipPlugin, dayjs };
+export { uPlot, drawPoints, drawHLine, drawVLine, drawVRect, drawHRect, wheelZoomPlugin, tooltipPlugin, dayjs };
 
