@@ -24,12 +24,10 @@ Here's a time series in hourly steps over 12 years, representing a total of 874,
 
 ```r
 library(uPlot)
-uPlot(
-  data = eco2mix[, c(1, 3:11)],
-  options = list(
+uPlot(data = eco2mix[, c(1, 3:11)]) %>% 
+  uOptions(
     title = "Electricity production by sources in France (2012 - 2023)"
-  )
-) %>% 
+  ) %>% 
   uColors(
     "bioenergies" = "#156956",
     "fuel" = "#80549f",
@@ -49,12 +47,10 @@ uPlot(
 Area ranges examples :
 
 ```r
-uPlot(
-  data = temperatures,
-  options = list(
+uPlot(data = temperatures) %>% 
+  uOptions(
     title = "Temperatures in 2022 with range from 2018 to 2021"
-  )
-) %>% 
+  ) %>% 
   uAxesY(
     label = "Temperature in degree celsius",
     values = JS("function(u, vals) {return vals.map(v => v + '°C');}")
@@ -70,12 +66,10 @@ uPlot(
 
 
 ```r
-uPlot(
-  data = temperatures[, c(1, 2, 5)],
-  options = list(
+uPlot(data = temperatures[, c(1, 2, 5)]) %>% 
+  uOptions(
     title = "Temperatures in 2022 compared to average from previous years"
-  )
-) %>% 
+  ) %>% 
   uAxesY(
     label = "Temperature in degree celsius",
     values = JS("function(u, vals) {return vals.map(v => v + '°C');}")

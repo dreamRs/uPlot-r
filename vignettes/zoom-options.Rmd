@@ -62,13 +62,13 @@ uPlot(temperatures[, c(1, 2)], use_gzipped_json = TRUE) %>%
 ```{r wheel}
 uPlot(
   data = temperatures[, c(1, 2)],
-  use_gzipped_json = TRUE,
-  options = list(
+  use_gzipped_json = TRUE
+) %>% 
+  uOptions(
     plugins = list(
       JS("wheelZoomPlugin({factor: 0.75})")
     )
   )
-)
 ```
 
 

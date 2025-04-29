@@ -45,15 +45,13 @@ uPlot(temperatures[, c(1, 2)]) %>%
 ## In tooltip
 
 ```{r tooltip}
-uPlot(
-  data = temperatures[, c(1, 2)],
-  options = list(
+uPlot(temperatures[, c(1, 2)]) %>% 
+  uOptions(
     plugins = list(
       JS("tooltipPlugin()")
     )
-  )
-) %>% 
-  uCursor(focus = list(prox = 10)) %>% 
+  ) %>% 
+  uCursor(focus = list(prox = 100)) %>% 
   uSeries(
     serie = "temperature",
     label = "Temperature 2022", 

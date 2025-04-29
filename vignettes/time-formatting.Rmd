@@ -48,20 +48,17 @@ Date-time formats available and R equivalent:
 Use the same format in legend and axes : 
 
 ```{r fmt-global}
-uPlot(
-  data = eco2mix[1:150, c(1, 2, 6)],
-  options = list(
+uPlot(eco2mix[1:150, c(1, 2, 6)]) %>% 
+  uOptions(
     fmtDate = JS("tpl => uPlot.fmtDate('{DD}/{MM}\\n{H}h');")
   )
-)
 ```
 
 Change months and days labels : 
 
 ```{r months-names}
-uPlot(
-  data = temperatures[1:150, c(1, 2)],
-  options = list(
+uPlot(temperatures[1:150, c(1, 2)]) %>% 
+  uOptions(
     fmtDate = htmlwidgets::JS(
       sprintf(
         "tpl => uPlot.fmtDate('{WWW} {DD}\\n{MMMM}', %s);",
@@ -74,7 +71,6 @@ uPlot(
       )
     )
   )
-)
 ```
 
 
@@ -130,22 +126,20 @@ Custom month names combined with axis formatting:
 ```{r y-axis-months}
 eco2mix %>% 
   subset(format(datetime, "%Y") == "2020", select = c(1, 2, 6)) %>% 
-  uPlot(
-    use_gzipped_json = TRUE,
-    options = list(
-      fmtDate = JS(
-        sprintf(
-          "tpl => uPlot.fmtDate(tpl, %s);",
-          jsonlite::toJSON(list(
-            MMMM = c("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"),
-            MMM = c("jan","fév","mar","avr","mai","juin","juil","août","sept","oct","nov", "déc"),
-            WWWW = c("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"),
-            WWW = c("dim","lun","mar","mer","jeu","ven","sam")
-          ))
-        )
+  uPlot(use_gzipped_json = TRUE) %>%
+  uOptions(
+    fmtDate = JS(
+      sprintf(
+        "tpl => uPlot.fmtDate(tpl, %s);",
+        jsonlite::toJSON(list(
+          MMMM = c("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"),
+          MMM = c("jan","fév","mar","avr","mai","juin","juil","août","sept","oct","nov", "déc"),
+          WWWW = c("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"),
+          WWW = c("dim","lun","mar","mer","jeu","ven","sam")
+        ))
       )
     )
-  ) %>%
+  ) %>% 
   uAxesX(
     values = list(
       #    tick incr        Default        year                         month day                     hour  min           sec   mode
@@ -174,12 +168,10 @@ You can also format date-time with timezone support using the dayjs JavaScript l
 ```{r}
 eco2mix %>% 
   subset(format(datetime, "%Y") == "2020", select = c(1, 2, 6)) %>% 
-  uPlot(
-    use_gzipped_json = TRUE,
-    options = list(
-      fmtDate = JS("(tpl) => (date) => dayjs(date).tz('Europe/Paris').format(tpl)")
-    )
-  ) %>%
+  uPlot(use_gzipped_json = TRUE) %>%
+  uOptions(
+    fmtDate = JS("(tpl) => (date) => dayjs(date).tz('Europe/Paris').format(tpl)")
+  ) %>% 
   uSeries(
     serie = "datetime", # column name
     value = "DD/MM/YYYY [at] H[h]" # format to be applied in legend, use [] to escape characters
