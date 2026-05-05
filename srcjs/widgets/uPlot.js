@@ -10,6 +10,7 @@ import { columnHighlightPlugin } from "../modules/columnHighlightPlugin";
 import { drawPoints } from "../modules/drawPoints";
 import { drawHLine, drawVLine, drawVRect, drawHRect } from "../modules/draw";
 import { candlestickPlugin } from "../modules/candlestickPlugin";
+import { createZoomRanger } from "../modules/zoomRangerPlugin";
 import { ungzip } from "pako";
 import * as dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -43,12 +44,20 @@ HTMLWidgets.widget({
   type: "output",
 
   factory: function (el, width, height) {
-    var plot, options, data;
+    var plot, rangerPlot, rangerWrap, options, data;
 
     return {
       renderValue: function (x) {
         if (typeof plot !== "undefined") {
           plot.destroy();
+        }
+        if (typeof rangerPlot !== "undefined") {
+          rangerPlot.destroy();
+          rangerPlot = undefined;
+        }
+        if (typeof rangerWrap !== "undefined") {
+          el.removeChild(rangerWrap);
+          rangerWrap = undefined;
         }
         options = x.config.options;
         options.width = width;
@@ -64,7 +73,20 @@ HTMLWidgets.widget({
           data = JSON.parse(decodedData);
         }
         //console.log(data);
-        if (x.stacked) {
+        if (x.config.zoomRanger) {
+          // Zoom ranger mode: render a navigator below the main chart.
+          const rangerCfg = x.config.zoomRanger;
+          const mainHeight = Math.max(
+            50,
+            height - (rangerCfg.height || 80) - 4
+          );
+          const charts = createZoomRanger(
+            el, width, mainHeight, data, options, rangerCfg, uPlot
+          );
+          plot = charts.zoomed;
+          rangerPlot = charts.ranger;
+          rangerWrap = charts.wrap;
+        } else if (x.stacked) {
           if (!options.hooks) options.hooks = {};
           options.hooks.init = [
             (u) => {
@@ -156,5 +178,6 @@ export {
   legendAsTooltipPlugin,
   columnHighlightPlugin,
   candlestickPlugin,
+  createZoomRanger,
   dayjs,
 };
