@@ -44,7 +44,7 @@ HTMLWidgets.widget({
   type: "output",
 
   factory: function (el, width, height) {
-    var plot, rangerPlot, rangerWrap, options, data;
+    var plot, rangerPlot, rangerWrapEl, options, data;
 
     return {
       renderValue: function (x) {
@@ -55,9 +55,9 @@ HTMLWidgets.widget({
           rangerPlot.destroy();
           rangerPlot = undefined;
         }
-        if (typeof rangerWrap !== "undefined") {
-          el.removeChild(rangerWrap);
-          rangerWrap = undefined;
+        if (typeof rangerWrapEl !== "undefined") {
+          el.removeChild(rangerWrapEl);
+          rangerWrapEl = undefined;
         }
         options = x.config.options;
         options.width = width;
@@ -85,7 +85,7 @@ HTMLWidgets.widget({
           );
           plot = charts.zoomed;
           rangerPlot = charts.ranger;
-          rangerWrap = charts.wrap;
+          rangerWrapEl = charts.wrap;
         } else if (x.stacked) {
           if (!options.hooks) options.hooks = {};
           options.hooks.init = [

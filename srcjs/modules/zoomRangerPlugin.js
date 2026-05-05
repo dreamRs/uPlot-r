@@ -33,11 +33,9 @@ function createZoomRanger(el, width, mainHeight, data, opts, cfg, UPlot) {
       ".u-zoom-ranger-wrap .u-zoom-ranger-nav .u-select:active { cursor: grabbing; }",
       ".u-zoom-ranger-wrap .u-zoom-ranger-nav .u-axis { pointer-events: none; }",
       ".u-grip-l, .u-grip-r {",
-      "  position: absolute; top: 0; width: " + gripWidth + "px; height: 100%;",
-      "  background: " + gripColor + "; opacity: 0.8; cursor: ew-resize; border-radius: 2px;",
+      "  position: absolute; top: 0; height: 100%;",
+      "  opacity: 0.8; cursor: ew-resize; border-radius: 2px;",
       "}",
-      ".u-grip-l { left:  " + (-Math.ceil(gripWidth / 2)) + "px; }",
-      ".u-grip-r { right: " + (-Math.ceil(gripWidth / 2)) + "px; }",
     ].join("\n");
     document.head.appendChild(style);
   }
@@ -57,8 +55,8 @@ function createZoomRanger(el, width, mainHeight, data, opts, cfg, UPlot) {
   el.appendChild(wrap);
 
   // ── Shared state ───────────────────────────────────────────────────────────
-  let x0, lft0, rgt0;
-  const lftWid = { left: null, width: null };
+  let x0, left0, right0;
+  const rangerSelection = { left: null, width: null };
   const minMax = { min: null, max: null };
 
   const BOUNDARY_LEFT  = 0;
@@ -67,6 +65,9 @@ function createZoomRanger(el, width, mainHeight, data, opts, cfg, UPlot) {
 
   // Forward-declared so hooks can close over them safely.
   let uZoomed, uRanger;
+
+  // Pixel ratio — uPlot.pxRatio is a static property on the constructor.
+  const pxRatio = UPlot.pxRatio || window.devicePixelRatio || 1;
 
   // ── Helpers ────────────────────────────────────────────────────────────────
   function debounce(fn) {
@@ -84,45 +85,51 @@ function createZoomRanger(el, width, mainHeight, data, opts, cfg, UPlot) {
     return d;
   }
 
-  function selectRanger(newLft, newWid) {
-    lftWid.left  = newLft;
-    lftWid.width = newWid;
-    uRanger.setSelect(lftWid, false);
+  function applyGripStyle(el, isLeft) {
+    const offset = -Math.ceil(gripWidth / 2);
+    el.style.width      = gripWidth + "px";
+    el.style.background = gripColor;
+    if (isLeft) {
+      el.style.left = offset + "px";
+    } else {
+      el.style.right = offset + "px";
+    }
   }
 
-  function zoomMain(newLft, newWid) {
-    minMax.min = uRanger.posToVal(newLft,          "x");
-    minMax.max = uRanger.posToVal(newLft + newWid, "x");
+  function selectRanger(newLeft, newWidth) {
+    rangerSelection.left  = newLeft;
+    rangerSelection.width = newWidth;
+    uRanger.setSelect(rangerSelection, false);
+  }
+
+  function zoomMain(newLeft, newWidth) {
+    minMax.min = uRanger.posToVal(newLeft,           "x");
+    minMax.max = uRanger.posToVal(newLeft + newWidth, "x");
     uZoomed.setScale("x", minMax);
   }
 
-  function update(newLft, newRgt, movedBoundary) {
-    const maxRgt = uRanger.bbox.width / uPlotPxRatio();
+  function update(newLeft, newRight, movedBoundary) {
+    const maxRight = uRanger.bbox.width / pxRatio;
 
     if (movedBoundary === BOUNDARY_BOTH) {
-      const initWidth = newRgt - newLft;
-      if (newRgt > maxRgt) { newRgt = maxRgt; newLft = newRgt - initWidth; }
-      else if (newLft < 0) { newLft = 0;      newRgt = newLft + initWidth; }
+      const initWidth = newRight - newLeft;
+      if (newRight > maxRight) { newRight = maxRight; newLeft = newRight - initWidth; }
+      else if (newLeft < 0)   { newLeft  = 0;        newRight = newLeft + initWidth; }
     } else {
-      if (newLft > newRgt) {
-        if (movedBoundary === BOUNDARY_LEFT)  newLft = newRgt;
-        else if (movedBoundary === BOUNDARY_RIGHT) newRgt = newLft;
+      if (newLeft > newRight) {
+        if (movedBoundary === BOUNDARY_LEFT)  newLeft  = newRight;
+        else if (movedBoundary === BOUNDARY_RIGHT) newRight = newLeft;
       }
-      newLft = Math.max(0, newLft);
-      newRgt = Math.min(newRgt, maxRgt);
+      newLeft  = Math.max(0, newLeft);
+      newRight = Math.min(newRight, maxRight);
     }
-    zoomMain(newLft, newRgt - newLft);
-  }
-
-  function uPlotPxRatio() {
-    // uPlot.pxRatio is a static property on the constructor
-    return UPlot.pxRatio || window.devicePixelRatio || 1;
+    zoomMain(newLeft, newRight - newLeft);
   }
 
   function bindMove(e, onMove) {
-    x0   = e.clientX;
-    lft0 = uRanger.select.left;
-    rgt0 = lft0 + uRanger.select.width;
+    x0     = e.clientX;
+    left0  = uRanger.select.left;
+    right0 = left0 + uRanger.select.width;
 
     const _onMove = debounce(onMove);
     document.addEventListener("mousemove", _onMove);
@@ -164,28 +171,32 @@ function createZoomRanger(el, width, mainHeight, data, opts, cfg, UPlot) {
       ready: [
         (u) => {
           // Full selection initially (shows all data)
-          const selLeft  = 0;
-          const selWidth = u.bbox.width / uPlotPxRatio();
-          const selHeight = u.bbox.height / uPlotPxRatio();
+          const selLeft   = 0;
+          const selWidth  = u.bbox.width  / pxRatio;
+          const selHeight = u.bbox.height / pxRatio;
           u.setSelect({ left: selLeft, width: selWidth, height: selHeight }, false);
 
           const sel = u.root.querySelector(".u-select");
 
           sel.addEventListener("mousedown", (e) => {
             bindMove(e, (ev) =>
-              update(lft0 + (ev.clientX - x0), rgt0 + (ev.clientX - x0), BOUNDARY_BOTH)
+              update(left0 + (ev.clientX - x0), right0 + (ev.clientX - x0), BOUNDARY_BOTH)
             );
           });
 
-          placeDiv(sel, "u-grip-l").addEventListener("mousedown", (e) => {
+          const gripL = placeDiv(sel, "u-grip-l");
+          applyGripStyle(gripL, true);
+          gripL.addEventListener("mousedown", (e) => {
             bindMove(e, (ev) =>
-              update(lft0 + (ev.clientX - x0), rgt0, BOUNDARY_LEFT)
+              update(left0 + (ev.clientX - x0), right0, BOUNDARY_LEFT)
             );
           });
 
-          placeDiv(sel, "u-grip-r").addEventListener("mousedown", (e) => {
+          const gripR = placeDiv(sel, "u-grip-r");
+          applyGripStyle(gripR, false);
+          gripR.addEventListener("mousedown", (e) => {
             bindMove(e, (ev) =>
-              update(lft0, rgt0 + (ev.clientX - x0), BOUNDARY_RIGHT)
+              update(left0, right0 + (ev.clientX - x0), BOUNDARY_RIGHT)
             );
           });
         },
